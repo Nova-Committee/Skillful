@@ -8,11 +8,6 @@ plugins {
 group = 'committee.nova'
 version = '1.0.2'
 
-configurations {
-    embed
-    compile.extendsFrom(embed)
-}
-
 java {
     archivesBaseName = 'Skillful-Forge-1.12.2'
     //toolchain.languageVersion = JavaLanguageVersion.of(8)
@@ -92,10 +87,6 @@ dependencies {
 
 // Example for how to get properties into the manifest for reading at runtime.
 jar {
-    from configurations.embed.collect {
-        exclude '**/LICENSE.txt'
-        it.isDirectory() ? it : zipTree(it)
-    }
     manifest {
         attributes([
                 "Specification-Title"     : "skillful",
