@@ -19,7 +19,7 @@ class SkillInstance(private var skill: ISkill, val player: UUID) extends INBTSer
   def getCurrentLevel: Int = currentLevel
 
   def addXp(xp: Int): Unit = {
-    val event = SkillXpEvent(player, skill, xp)
+    val event = SkillXpEvent.Pre(player, skill, xp)
     if (MinecraftForge.EVENT_BUS.post(event)) return
     _addXp(event.getAmount)
   }
@@ -30,6 +30,7 @@ class SkillInstance(private var skill: ISkill, val player: UUID) extends INBTSer
       return
     }
     currentXp += xp
+    MinecraftForge.EVENT_BUS.post(SkillXpEvent.Post(player, skill, xp))
     while (currentXp >= skill.getLevelRequiredXp(currentLevel)) {
       currentXp -= skill.getLevelRequiredXp(currentLevel)
       currentLevel += 1
@@ -39,7 +40,7 @@ class SkillInstance(private var skill: ISkill, val player: UUID) extends INBTSer
   }
 
   def reduceXp(xp: Int): Unit = {
-    val event = SkillXpEvent(player, skill, -xp)
+    val event = SkillXpEvent.Pre(player, skill, -xp)
     if (MinecraftForge.EVENT_BUS.post(event)) return
     _reduceXp(-event.getAmount)
   }
@@ -50,6 +51,7 @@ class SkillInstance(private var skill: ISkill, val player: UUID) extends INBTSer
       return
     }
     currentXp -= xp
+    MinecraftForge.EVENT_BUS.post(SkillXpEvent.Post(player, skill, -xp))
     while (currentXp < 0) {
       currentLevel -= 1
       currentXp += skill.getLevelRequiredXp(currentLevel)
