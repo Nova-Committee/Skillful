@@ -10,6 +10,8 @@ import scala.collection.mutable
 object SkillfulStorage {
   class SkillRegisterEvent extends Event {
     def addSkill(skill: ISkill): Unit = SkillfulStorage.addSkill(skill)
+
+    def addSkills(skills: ISkill*): Unit = for (skill <- skills) addSkill(skill)
   }
 
   private var skillRegistryFrozen = false
