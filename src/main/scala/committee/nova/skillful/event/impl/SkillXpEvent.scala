@@ -1,6 +1,6 @@
 package committee.nova.skillful.event.impl
 
-import committee.nova.skillful.api.SkillInstance
+import committee.nova.skillful.skills.SkillInstance
 
 import java.util.UUID
 

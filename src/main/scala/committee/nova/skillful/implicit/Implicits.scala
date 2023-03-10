@@ -1,7 +1,8 @@
 package committee.nova.skillful.`implicit`
 
-import committee.nova.skillful.api.{ISkill, SkillInstance}
+import committee.nova.skillful.api.ISkill
 import committee.nova.skillful.player.capabilities.{ISkills, SkillInfo}
+import committee.nova.skillful.skills.SkillInstance
 import committee.nova.skillful.util.Utilities
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.util.ResourceLocation

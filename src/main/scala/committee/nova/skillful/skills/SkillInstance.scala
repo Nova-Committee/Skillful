@@ -1,5 +1,6 @@
-package committee.nova.skillful.api
+package committee.nova.skillful.skills
 
+import committee.nova.skillful.api.ISkill
 import committee.nova.skillful.event.impl.{SkillLevelEvent, SkillXpEvent}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.MinecraftForge
@@ -31,13 +32,13 @@ class SkillInstance(private var skill: ISkill, val player: UUID) extends INBTSer
       return
     }
     currentXp += xp
-    MinecraftForge.EVENT_BUS.post(SkillXpEvent.Post(player, this, xp))
     while (currentXp >= skill.getLevelRequiredXp(currentLevel)) {
       currentXp -= skill.getLevelRequiredXp(currentLevel)
       currentLevel += 1
       if (currentLevel > skill.getMaxLevel) cheat()
       else MinecraftForge.EVENT_BUS.post(SkillLevelEvent.Up(player, this, currentLevel))
     }
+    MinecraftForge.EVENT_BUS.post(SkillXpEvent.Post(player, this, xp))
   }
 
   def reduceXp(xp: Int): Unit = {
@@ -53,13 +54,13 @@ class SkillInstance(private var skill: ISkill, val player: UUID) extends INBTSer
       return
     }
     currentXp -= xp
-    MinecraftForge.EVENT_BUS.post(SkillXpEvent.Post(player, this, -xp))
     while (currentXp < 0) {
       currentLevel -= 1
       currentXp += skill.getLevelRequiredXp(currentLevel)
       if (currentLevel < 0) clear()
       else MinecraftForge.EVENT_BUS.post(SkillLevelEvent.Down(player, this, currentLevel))
     }
+    MinecraftForge.EVENT_BUS.post(SkillXpEvent.Post(player, this, -xp))
   }
 
   def clear(): Unit = {

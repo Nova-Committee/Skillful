@@ -1,7 +1,8 @@
 package committee.nova.skillful.player.capabilities
 
 import committee.nova.skillful.Skillful.skillfulCap
-import committee.nova.skillful.api.{ISkill, SkillInstance}
+import committee.nova.skillful.api.ISkill
+import committee.nova.skillful.skills.SkillInstance
 import committee.nova.skillful.storage.SkillfulStorage
 import net.minecraft.nbt.{NBTBase, NBTTagCompound, NBTTagList}
 import net.minecraft.util.{EnumFacing, ResourceLocation}

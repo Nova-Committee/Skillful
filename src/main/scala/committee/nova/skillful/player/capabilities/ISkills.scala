@@ -1,6 +1,7 @@
 package committee.nova.skillful.player.capabilities
 
-import committee.nova.skillful.api.{ISkill, SkillInstance}
+import committee.nova.skillful.api.ISkill
+import committee.nova.skillful.skills.SkillInstance
 import committee.nova.skillful.storage.SkillfulStorage
 import net.minecraft.util.ResourceLocation
 
