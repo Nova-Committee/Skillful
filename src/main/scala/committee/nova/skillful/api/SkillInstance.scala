@@ -36,7 +36,7 @@ class SkillInstance(private var skill: ISkill, val player: UUID) extends INBTSer
       currentXp -= skill.getLevelRequiredXp(currentLevel)
       currentLevel += 1
       if (currentLevel > skill.getMaxLevel) cheat()
-      else MinecraftForge.EVENT_BUS.post(SkillLevelEvent.Up(player, skill, currentLevel))
+      else MinecraftForge.EVENT_BUS.post(SkillLevelEvent.Up(player, this, currentLevel))
     }
   }
 
@@ -58,7 +58,7 @@ class SkillInstance(private var skill: ISkill, val player: UUID) extends INBTSer
       currentLevel -= 1
       currentXp += skill.getLevelRequiredXp(currentLevel)
       if (currentLevel < 0) clear()
-      else MinecraftForge.EVENT_BUS.post(SkillLevelEvent.Down(player, skill, currentLevel))
+      else MinecraftForge.EVENT_BUS.post(SkillLevelEvent.Down(player, this, currentLevel))
     }
   }
 
