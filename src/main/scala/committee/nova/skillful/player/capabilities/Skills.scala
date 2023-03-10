@@ -59,6 +59,8 @@ object Skills {
   class Impl extends ISkills {
     private val skills: CopyOnWriteArraySet[SkillInstance] = new CopyOnWriteArraySet[SkillInstance]()
 
+    private val skillInfos: CopyOnWriteArraySet[SkillInfo] = new CopyOnWriteArraySet[SkillInfo]()
+
     private var uuid: UUID = _
 
     override def getUUID: UUID = uuid
@@ -71,6 +73,15 @@ object Skills {
       skills.asScala.foreach(s => if (s.getSkill.equals(skill)) return s)
       val instance = new SkillInstance(skill, uuid)
       skills.add(instance)
+      instance
+    }
+
+    override def getSkillInfos: CopyOnWriteArraySet[SkillInfo] = skillInfos
+
+    override def getSkillInfo(id: ResourceLocation): SkillInfo = {
+      skillInfos.asScala.foreach(i => if (i.getId.equals(id)) return i)
+      val instance = new SkillInfo(id)
+      skillInfos.add(instance)
       instance
     }
   }

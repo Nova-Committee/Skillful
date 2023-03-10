@@ -14,6 +14,12 @@ trait ISkills {
 
   def getSkills: CopyOnWriteArraySet[SkillInstance]
 
+  def getSkillInfos: CopyOnWriteArraySet[SkillInfo]
+
+  def getSkillInfo(id: ResourceLocation): SkillInfo
+
+  def getSkillInfo(skill: ISkill): SkillInfo = getSkillInfo(skill.getId)
+
   def getSkill(skill: ISkill): SkillInstance
 
   def getSkill(id: ResourceLocation): SkillInstance = getSkill(SkillfulStorage.getSkill(id))
