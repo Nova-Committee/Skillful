@@ -3,8 +3,6 @@ package committee.nova.skillful.event.handler
 import committee.nova.skillful.Skillful
 import committee.nova.skillful.Skillful.skillfulCap
 import committee.nova.skillful.player.capabilities.Skills
-import committee.nova.skillful.skills.DefaultSkills
-import committee.nova.skillful.storage.SkillfulStorage.SkillRegisterEvent
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.ResourceLocation
@@ -18,11 +16,6 @@ object ForgeEventHandler {
 }
 
 class ForgeEventHandler {
-  @SubscribeEvent
-  def onSkillRegister(event: SkillRegisterEvent): Unit = {
-    event.addSkill(DefaultSkills.MELEE)
-  }
-
   @SubscribeEvent
   def onClone(event: Clone): Unit = {
     val oldPlayer = event.getOriginal
