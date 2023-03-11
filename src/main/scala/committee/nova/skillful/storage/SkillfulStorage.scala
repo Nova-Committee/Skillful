@@ -3,6 +3,7 @@ package committee.nova.skillful.storage
 import committee.nova.skillful.Skillful
 import committee.nova.skillful.api.ISkill
 import net.minecraft.util.ResourceLocation
+import net.minecraft.world.BossInfo
 import net.minecraftforge.fml.common.eventhandler.Event
 
 import scala.collection.mutable
@@ -25,6 +26,8 @@ object SkillfulStorage {
       override def getMaxLevel: Int = Int.MaxValue
 
       override def getLevelRequiredXp(level: Int): Int = Int.MaxValue
+
+      override def getColor: BossInfo.Color = BossInfo.Color.WHITE
     }
     skills.add(dummy)
     Skillful.getLogger.warn(s"Skill with id $id not found. Registered a dummy one instead...")

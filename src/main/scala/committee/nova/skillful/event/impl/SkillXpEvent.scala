@@ -1,19 +1,18 @@
 package committee.nova.skillful.event.impl
 
 import committee.nova.skillful.skills.SkillInstance
-
-import java.util.UUID
+import net.minecraft.entity.player.EntityPlayerMP
 
 object SkillXpEvent {
-  case class Pre(private val player: UUID, private val skill: SkillInstance, private var amount: Int) extends SkillXpEvent(player, skill, amount) {
+  class Pre(private val player: EntityPlayerMP, private val skill: SkillInstance, private var amount: Int) extends SkillXpEvent(player, skill, amount) {
     def setAmount(newAmount: Int): Unit = amount = newAmount
 
     override def isCancelable: Boolean = true
   }
 
-  case class Post(private val player: UUID, private val skill: SkillInstance, private var amount: Int) extends SkillXpEvent(player, skill, amount)
+  class Post(private val player: EntityPlayerMP, private val skill: SkillInstance, private var amount: Int) extends SkillXpEvent(player, skill, amount)
 }
 
-abstract class SkillXpEvent(private val player: UUID, private val skill: SkillInstance, private var amount: Int) extends SkillEvent(player, skill) {
+abstract class SkillXpEvent(private val player: EntityPlayerMP, private val skill: SkillInstance, private var amount: Int) extends SkillEvent(player, skill) {
   def getAmount: Int = amount
 }

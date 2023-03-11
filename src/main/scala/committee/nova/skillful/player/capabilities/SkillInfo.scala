@@ -1,18 +1,17 @@
 package committee.nova.skillful.player.capabilities
 
-import net.minecraft.util.ResourceLocation
-import net.minecraft.util.text.TextComponentString
-import net.minecraft.world.BossInfo
-import net.minecraft.world.BossInfo.{Color, Overlay}
+import committee.nova.skillful.skills.SkillInstance
+import net.minecraft.util.text.TextComponentTranslation
+import net.minecraft.world.BossInfo.Overlay
+import net.minecraft.world.BossInfoServer
 
-import java.util.UUID
+class SkillInfo(private val skill: SkillInstance) extends BossInfoServer(
+  new TextComponentTranslation(s"skill.${skill.getSkill.getId.getNamespace}.${skill.getSkill.getId.getPath}", skill.getCurrentLevel.toString), skill.getSkill.getColor, Overlay.PROGRESS) {
+  private var expireTime: Int = getMaxExpireTime
 
-class SkillInfo(private val skill: ResourceLocation) extends BossInfo(UUID.randomUUID(),
-  // TODO:
-  new TextComponentString(skill.getPath), Color.BLUE, Overlay.PROGRESS) {
-  private var expireTime: Int = 20
+  def getMaxExpireTime: Int = 100
 
-  def getId: ResourceLocation = skill
+  def getSkillInstance: SkillInstance = skill
 
   def isActive: Boolean = expireTime > 0
 
@@ -21,7 +20,7 @@ class SkillInfo(private val skill: ResourceLocation) extends BossInfo(UUID.rando
     !isActive
   }
 
-  def activate(): Unit = expireTime = 20
+  def activate(): Unit = expireTime = getMaxExpireTime
 
   override def equals(obj: Any): Boolean = obj match {
     case s: SkillInfo => s.skill.equals(skill)

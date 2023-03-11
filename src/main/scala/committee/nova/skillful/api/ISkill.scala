@@ -1,9 +1,13 @@
 package committee.nova.skillful.api
 
 import net.minecraft.util.ResourceLocation
+import net.minecraft.world.BossInfo
 
 trait ISkill {
   def getId: ResourceLocation
+
+
+  def getColor: BossInfo.Color
 
   def getMaxLevel: Int
 

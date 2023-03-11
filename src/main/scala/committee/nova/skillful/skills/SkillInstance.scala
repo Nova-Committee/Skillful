@@ -2,13 +2,12 @@ package committee.nova.skillful.skills
 
 import committee.nova.skillful.api.ISkill
 import committee.nova.skillful.event.impl.{SkillLevelEvent, SkillXpEvent}
+import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.common.util.INBTSerializable
 
-import java.util.UUID
-
-class SkillInstance(private var skill: ISkill, val player: UUID) extends INBTSerializable[NBTTagCompound] {
+class SkillInstance(val skill: ISkill) extends INBTSerializable[NBTTagCompound] {
   private var currentXp: Int = 0
 
   private var currentLevel: Int = 0
@@ -19,16 +18,16 @@ class SkillInstance(private var skill: ISkill, val player: UUID) extends INBTSer
 
   def getCurrentLevel: Int = currentLevel
 
-  def addXp(xp: Int): Unit = {
-    val event = SkillXpEvent.Pre(player, this, xp)
+  def addXp(player: EntityPlayerMP, xp: Int): Unit = {
+    val event = new SkillXpEvent.Pre(player, this, xp)
     if (MinecraftForge.EVENT_BUS.post(event)) return
-    _addXp(event.getAmount)
+    _addXp(player, event.getAmount)
   }
 
-  def _addXp(xp: Int): Unit = {
+  def _addXp(player: EntityPlayerMP, xp: Int): Unit = {
     if (xp == 0) return
     if (xp < 0) {
-      _reduceXp(-xp)
+      _reduceXp(player, -xp)
       return
     }
     currentXp += xp
@@ -36,21 +35,21 @@ class SkillInstance(private var skill: ISkill, val player: UUID) extends INBTSer
       currentXp -= skill.getLevelRequiredXp(currentLevel)
       currentLevel += 1
       if (currentLevel > skill.getMaxLevel) cheat()
-      else MinecraftForge.EVENT_BUS.post(SkillLevelEvent.Up(player, this, currentLevel))
+      else MinecraftForge.EVENT_BUS.post(new SkillLevelEvent.Up(player, this, currentLevel))
     }
-    MinecraftForge.EVENT_BUS.post(SkillXpEvent.Post(player, this, xp))
+    MinecraftForge.EVENT_BUS.post(new SkillXpEvent.Post(player, this, xp))
   }
 
-  def reduceXp(xp: Int): Unit = {
-    val event = SkillXpEvent.Pre(player, this, -xp)
+  def reduceXp(player: EntityPlayerMP, xp: Int): Unit = {
+    val event = new SkillXpEvent.Pre(player, this, -xp)
     if (MinecraftForge.EVENT_BUS.post(event)) return
-    _reduceXp(-event.getAmount)
+    _reduceXp(player, -event.getAmount)
   }
 
-  def _reduceXp(xp: Int): Unit = {
+  def _reduceXp(player: EntityPlayerMP, xp: Int): Unit = {
     if (xp == 0) return
     if (xp < 0) {
-      _addXp(-xp)
+      _addXp(player, -xp)
       return
     }
     currentXp -= xp
@@ -58,9 +57,9 @@ class SkillInstance(private var skill: ISkill, val player: UUID) extends INBTSer
       currentLevel -= 1
       currentXp += skill.getLevelRequiredXp(currentLevel)
       if (currentLevel < 0) clear()
-      else MinecraftForge.EVENT_BUS.post(SkillLevelEvent.Down(player, this, currentLevel))
+      else MinecraftForge.EVENT_BUS.post(new SkillLevelEvent.Down(player, this, currentLevel))
     }
-    MinecraftForge.EVENT_BUS.post(SkillXpEvent.Post(player, this, -xp))
+    MinecraftForge.EVENT_BUS.post(new SkillXpEvent.Post(player, this, -xp))
   }
 
   def clear(): Unit = {
@@ -87,9 +86,9 @@ class SkillInstance(private var skill: ISkill, val player: UUID) extends INBTSer
   }
 
   override def equals(obj: Any): Boolean = obj match {
-    case that: SkillInstance => that.skill.equals(skill) && that.player.equals(player)
+    case that: SkillInstance => that.skill.equals(skill)
     case _ => false
   }
 
-  override def hashCode(): Int = player.hashCode() + skill.hashCode()
+  override def hashCode(): Int = skill.hashCode()
 }

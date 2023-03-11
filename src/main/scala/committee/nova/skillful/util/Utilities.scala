@@ -14,7 +14,7 @@ object Utilities {
 
   def getPlayerSkillStat(player: EntityPlayerMP, id: ResourceLocation): SkillInstance = getPlayerSkills(player).getSkill(id)
 
-  def getPlayerSkillInfo(player: EntityPlayerMP, skill: ISkill): SkillInfo = getPlayerSkills(player).getSkillInfo(skill)
+  def getPlayerSkillInfo(player: EntityPlayerMP, skill: ISkill): SkillInfo = getPlayerSkills(player).getSkillInfo(player, skill)
 
-  def getPlayerSkillInfo(player: EntityPlayerMP, id: ResourceLocation): SkillInfo = getPlayerSkills(player).getSkillInfo(id)
+  def getPlayerSkillInfo(player: EntityPlayerMP, id: ResourceLocation): SkillInfo = getPlayerSkills(player).getSkillInfo(player, id)
 }
