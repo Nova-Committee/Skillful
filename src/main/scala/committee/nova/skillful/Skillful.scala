@@ -3,6 +3,7 @@ package committee.nova.skillful
 import committee.nova.skillful.event.handler.{FMLEventHandler, ForgeEventHandler}
 import committee.nova.skillful.player.capabilities.{ISkills, Skills}
 import committee.nova.skillful.storage.SkillfulStorage
+import committee.nova.skillful.storage.SkillfulStorage.SkillRegisterEvent
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.common.capabilities.{Capability, CapabilityInject, CapabilityManager}
 import net.minecraftforge.fml.common.Mod
