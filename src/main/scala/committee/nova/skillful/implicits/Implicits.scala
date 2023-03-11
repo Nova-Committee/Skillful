@@ -1,4 +1,4 @@
-package committee.nova.skillful.`implicit`
+package committee.nova.skillful.implicits
 
 import committee.nova.skillful.api.ISkill
 import committee.nova.skillful.player.capabilities.{ISkills, SkillInfo}

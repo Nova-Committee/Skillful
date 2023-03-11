@@ -2,8 +2,8 @@ package committee.nova.skillful.event.handler
 
 import committee.nova.skillful.Skillful
 import committee.nova.skillful.Skillful.skillfulCap
-import committee.nova.skillful.`implicit`.Implicits.EntityPlayerMPImplicit
 import committee.nova.skillful.event.impl.{SkillLevelEvent, SkillXpEvent}
+import committee.nova.skillful.implicits.Implicits.EntityPlayerMPImplicit
 import committee.nova.skillful.player.capabilities.Skills
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer

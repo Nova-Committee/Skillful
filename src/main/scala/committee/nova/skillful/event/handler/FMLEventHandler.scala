@@ -1,6 +1,6 @@
 package committee.nova.skillful.event.handler
 
-import committee.nova.skillful.`implicit`.Implicits.EntityPlayerMPImplicit
+import committee.nova.skillful.implicits.Implicits.EntityPlayerMPImplicit
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraftforge.fml.common.FMLCommonHandler
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
