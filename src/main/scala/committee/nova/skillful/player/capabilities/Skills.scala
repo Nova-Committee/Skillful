@@ -10,9 +10,8 @@ import net.minecraftforge.common.capabilities.Capability.IStorage
 import net.minecraftforge.common.capabilities.{Capability, ICapabilitySerializable}
 
 import java.util.UUID
-import java.util.concurrent.CopyOnWriteArraySet
-import java.util.function.Predicate
 import scala.collection.JavaConverters._
+import scala.collection.mutable
 
 object Skills {
   class Provider extends ICapabilitySerializable[NBTTagCompound] {
@@ -42,25 +41,27 @@ object Skills {
 
     override def readNBT(capability: Capability[ISkills], instance: ISkills, side: EnumFacing, nbt: NBTBase): Unit = {
       nbt match {
-        case tag: NBTTagList => tag.asScala.foreach(n => {
-          val t = n.asInstanceOf[NBTTagCompound]
-          val skill = SkillfulStorage.getSkill(new ResourceLocation(t.getString("skill")))
-          val i = new SkillInstance(skill, instance.getUUID)
-          i.deserializeNBT(t)
-          instance.getSkills.removeIf(new Predicate[SkillInstance] {
-            override def test(t: SkillInstance): Boolean = t.getSkill.equals(skill)
-          })
-          instance.getSkills.add(i)
-        })
+        case tag: NBTTagList => {
+          val skills = instance.getSkills
+          skills.clear()
+          tag.asScala.foreach {
+            case t: NBTTagCompound =>
+              val skill = SkillfulStorage.getSkill(new ResourceLocation(t.getString("skill")))
+              val i = new SkillInstance(skill, instance.getUUID)
+              i.deserializeNBT(t)
+              skills.add(i)
+            case _ =>
+          }
+        }
         case _ =>
       }
     }
   }
 
   class Impl extends ISkills {
-    private val skills: CopyOnWriteArraySet[SkillInstance] = new CopyOnWriteArraySet[SkillInstance]()
+    private val skills: mutable.HashSet[SkillInstance] = new mutable.HashSet[SkillInstance]()
 
-    private val skillInfos: CopyOnWriteArraySet[SkillInfo] = new CopyOnWriteArraySet[SkillInfo]()
+    private val skillInfos: mutable.HashSet[SkillInfo] = new mutable.HashSet[SkillInfo]()
 
     private var uuid: UUID = _
 
@@ -68,19 +69,19 @@ object Skills {
 
     override def setUUID(uuid: UUID): Unit = this.uuid = uuid
 
-    override def getSkills: CopyOnWriteArraySet[SkillInstance] = skills
+    override def getSkills: mutable.HashSet[SkillInstance] = skills
 
     override def getSkill(skill: ISkill): SkillInstance = {
-      skills.asScala.foreach(s => if (s.getSkill.equals(skill)) return s)
+      skills.foreach(s => if (s.getSkill.equals(skill)) return s)
       val instance = new SkillInstance(skill, uuid)
       skills.add(instance)
       instance
     }
 
-    override def getSkillInfos: CopyOnWriteArraySet[SkillInfo] = skillInfos
+    override def getSkillInfos: mutable.HashSet[SkillInfo] = skillInfos
 
     override def getSkillInfo(id: ResourceLocation): SkillInfo = {
-      skillInfos.asScala.foreach(i => if (i.getId.equals(id)) return i)
+      skillInfos.foreach(i => if (i.getId.equals(id)) return i)
       val instance = new SkillInfo(id)
       skillInfos.add(instance)
       instance

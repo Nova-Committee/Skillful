@@ -6,16 +6,16 @@ import committee.nova.skillful.storage.SkillfulStorage
 import net.minecraft.util.ResourceLocation
 
 import java.util.UUID
-import java.util.concurrent.CopyOnWriteArraySet
+import scala.collection.mutable
 
 trait ISkills {
   def setUUID(uuid: UUID): Unit
 
   def getUUID: UUID
 
-  def getSkills: CopyOnWriteArraySet[SkillInstance]
+  def getSkills: mutable.HashSet[SkillInstance]
 
-  def getSkillInfos: CopyOnWriteArraySet[SkillInfo]
+  def getSkillInfos: mutable.HashSet[SkillInfo]
 
   def getSkillInfo(id: ResourceLocation): SkillInfo
 
