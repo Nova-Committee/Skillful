@@ -35,7 +35,7 @@ object Skills {
   class Storage extends IStorage[ISkills] {
     override def writeNBT(capability: Capability[ISkills], instance: ISkills, side: EnumFacing): NBTBase = {
       val tag = new NBTTagList
-      instance.getSkills.asScala.foreach(s => tag.appendTag(s.serializeNBT()))
+      instance.getSkills.foreach(s => tag.appendTag(s.serializeNBT()))
       tag
     }
 

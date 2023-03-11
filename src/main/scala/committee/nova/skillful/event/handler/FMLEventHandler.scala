@@ -1,7 +1,6 @@
 package committee.nova.skillful.event.handler
 
 import committee.nova.skillful.`implicit`.Implicits.EntityPlayerMPImplicit
-import committee.nova.skillful.player.capabilities.SkillInfo
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.network.play.server.SPacketUpdateBossInfo
 import net.minecraft.network.play.server.SPacketUpdateBossInfo.Operation
@@ -9,8 +8,6 @@ import net.minecraftforge.fml.common.FMLCommonHandler
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent
-
-import java.util.function.Consumer
 
 object FMLEventHandler {
   def init(): Unit = FMLCommonHandler.instance().bus().register(new FMLEventHandler)
@@ -30,9 +27,7 @@ class FMLEventHandler {
   @SubscribeEvent
   def onPlayerTick(event: PlayerTickEvent): Unit = {
     event.player match {
-      case p: EntityPlayerMP => p.getSkills.getSkillInfos.forEach(new Consumer[SkillInfo] {
-        override def accept(t: SkillInfo): Unit = if (t.isActive && t.tick()) p.connection.sendPacket(new SPacketUpdateBossInfo(Operation.REMOVE, t))
-      })
+      case p: EntityPlayerMP => p.getSkills.getSkillInfos.foreach(t => if (t.isActive && t.tick()) p.connection.sendPacket(new SPacketUpdateBossInfo(Operation.REMOVE, t)))
       case _ =>
     }
   }
