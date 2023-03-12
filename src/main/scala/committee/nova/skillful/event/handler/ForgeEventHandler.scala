@@ -10,7 +10,7 @@ import net.minecraft.entity.Entity
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
 import net.minecraft.init.SoundEvents
 import net.minecraft.network.play.server.SPacketSoundEffect
-import net.minecraft.util.text.{TextComponentString, TextComponentTranslation}
+import net.minecraft.util.text.{Style, TextComponentString, TextComponentTranslation, TextFormatting}
 import net.minecraft.util.{ResourceLocation, SoundCategory}
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.AttachCapabilitiesEvent
@@ -80,14 +80,14 @@ class ForgeEventHandler {
           }
         })
         if (buffer.nonEmpty) {
-          p.sendMessage(new TextComponentTranslation("info.skillful.wakeup.summary"))
+          p.sendMessage(new TextComponentTranslation("info.skillful.wakeup.summary").setStyle(new Style().setColor(TextFormatting.LIGHT_PURPLE)))
           buffer.foreach(x => {
             val c = x._2
             p.sendMessage(new TextComponentString(MessageFormat.format(
               new TextComponentTranslation(s"info.skillful.wakeup.${if (c > 0) "increase" else "decrease"}").getFormattedText,
               new TextComponentTranslation(s"skill.${x._1.getNamespace}.${x._1.getPath}").getFormattedText,
               c.toString
-            )))
+            )).setStyle(new Style().setColor(if (c > 0) TextFormatting.GREEN else TextFormatting.RED)))
           })
         }
       case _ =>
