@@ -5,8 +5,6 @@ import net.minecraft.entity.ai.attributes.{AttributeModifier, IAttribute}
 import net.minecraft.entity.player.EntityPlayerMP
 
 trait IApplyAttributeModifiers extends IActOnLevelChange with ICheckOnLogin {
-  def getTargetAttribute: IAttribute
-
   def getAttributeModifiers(player: EntityPlayerMP, skillInstance: SkillInstance): Map[IAttribute, AttributeModifier]
 
   def applyModifiers(player: EntityPlayerMP, instance: SkillInstance): Unit = {
