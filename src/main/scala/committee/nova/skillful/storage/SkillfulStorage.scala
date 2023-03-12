@@ -44,7 +44,9 @@ object SkillfulStorage {
     dummy
   }
 
-  def applyFoodEffect(player: EntityPlayerMP, stack: ItemStack): Unit = foods.foreach(s => if (s.getItemFood.equals(stack.getItem)) player.getSkillStat(s.getRelatedSkill).addXp(player, s.getChange(player, stack)))
+  def applyFoodEffect(player: EntityPlayerMP, stack: ItemStack): Unit = foods.foreach(s =>
+    if (s.getItemFood.equals(stack.getItem)) s.getChange(player, stack).foreach(
+      x => player.getSkillStat(x._1).addXp(player, x._2)))
 
   private def addSkill(skill: ISkill): Boolean = {
     val logger = Skillful.getLogger

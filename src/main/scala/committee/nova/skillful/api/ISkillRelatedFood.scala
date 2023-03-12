@@ -6,7 +6,5 @@ import net.minecraft.item.{ItemFood, ItemStack}
 trait ISkillRelatedFood {
   def getItemFood: ItemFood
 
-  def getRelatedSkill: ISkill
-
-  def getChange(player: EntityPlayerMP, stack: ItemStack): Int
+  def getChange(player: EntityPlayerMP, stack: ItemStack): Map[ISkill, Int]
 }
