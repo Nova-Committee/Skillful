@@ -1,6 +1,7 @@
 package committee.nova.skillful
 
 import committee.nova.skillful.event.handler.{FMLEventHandler, ForgeEventHandler}
+import committee.nova.skillful.network.handler.NetworkHandler
 import committee.nova.skillful.player.capabilities.{ISkills, Skills}
 import committee.nova.skillful.storage.SkillfulStorage
 import committee.nova.skillful.storage.SkillfulStorage.SkillRegisterEvent
@@ -30,6 +31,7 @@ object Skillful {
     CapabilityManager.INSTANCE.register(classOf[ISkills], new Skills.Storage, new Callable[ISkills] {
       override def call(): ISkills = new Skills.Impl
     })
+    NetworkHandler.init(e)
   }
 
   @EventHandler def init(e: FMLInitializationEvent): Unit = {

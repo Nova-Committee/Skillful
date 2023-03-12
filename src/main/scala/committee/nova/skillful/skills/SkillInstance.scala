@@ -2,6 +2,7 @@ package committee.nova.skillful.skills
 
 import committee.nova.skillful.api.ISkill
 import committee.nova.skillful.event.impl.{SkillLevelEvent, SkillXpEvent}
+import committee.nova.skillful.implicits.Implicits.EntityPlayerImplicit
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.MinecraftForge
@@ -34,10 +35,11 @@ class SkillInstance(val skill: ISkill) extends INBTSerializable[NBTTagCompound] 
     while (currentXp >= skill.getLevelRequiredXp(currentLevel)) {
       currentXp -= skill.getLevelRequiredXp(currentLevel)
       currentLevel += 1
-      if (currentLevel > skill.getMaxLevel) cheat()
+      if (currentLevel > skill.getMaxLevel) cheat(player)
       else MinecraftForge.EVENT_BUS.post(new SkillLevelEvent.Up(player, this, currentLevel))
     }
     MinecraftForge.EVENT_BUS.post(new SkillXpEvent.Post(player, this, xp))
+    player.syncSkills()
   }
 
   def reduceXp(player: EntityPlayerMP, xp: Int): Unit = {
@@ -56,20 +58,23 @@ class SkillInstance(val skill: ISkill) extends INBTSerializable[NBTTagCompound] 
     while (currentXp < 0) {
       currentLevel -= 1
       currentXp += skill.getLevelRequiredXp(currentLevel)
-      if (currentLevel < 0) clear()
+      if (currentLevel < 0) clear(player)
       else MinecraftForge.EVENT_BUS.post(new SkillLevelEvent.Down(player, this, currentLevel))
     }
     MinecraftForge.EVENT_BUS.post(new SkillXpEvent.Post(player, this, -xp))
+    player.syncSkills()
   }
 
-  def clear(): Unit = {
+  def clear(player: EntityPlayerMP): Unit = {
     currentLevel = 0
     currentXp = 0
+    player.syncSkills()
   }
 
-  def cheat(): Unit = {
+  def cheat(player: EntityPlayerMP): Unit = {
     currentLevel = skill.getMaxLevel
     currentXp = skill.getLevelRequiredXp(currentLevel) - 1
+    player.syncSkills()
   }
 
   override def serializeNBT(): NBTTagCompound = {

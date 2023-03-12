@@ -2,10 +2,10 @@ package committee.nova.skillful.player.capabilities
 
 import committee.nova.skillful.Skillful.skillfulCap
 import committee.nova.skillful.api.ISkill
-import committee.nova.skillful.implicits.Implicits.EntityPlayerMPImplicit
+import committee.nova.skillful.implicits.Implicits.EntityPlayerImplicit
 import committee.nova.skillful.skills.SkillInstance
 import committee.nova.skillful.storage.SkillfulStorage
-import net.minecraft.entity.player.EntityPlayerMP
+import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.{NBTBase, NBTTagCompound, NBTTagList}
 import net.minecraft.util.{EnumFacing, ResourceLocation}
 import net.minecraftforge.common.capabilities.Capability.IStorage
@@ -74,7 +74,7 @@ object Skills {
 
     override def getSkillInfos: mutable.HashSet[SkillInfo] = skillInfos
 
-    override def getSkillInfo(player: EntityPlayerMP, skill: ISkill): SkillInfo = {
+    override def getSkillInfo(player: EntityPlayer, skill: ISkill): SkillInfo = {
       skillInfos.foreach(i => if (i.getSkillInstance.getSkill.equals(skill)) return i)
       val instance = new SkillInfo(player.getSkillStat(skill))
       skillInfos.add(instance)
