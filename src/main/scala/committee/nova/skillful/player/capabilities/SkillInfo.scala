@@ -1,12 +1,20 @@
 package committee.nova.skillful.player.capabilities
 
 import committee.nova.skillful.skills.SkillInstance
-import net.minecraft.util.text.TextComponentTranslation
+import net.minecraft.util.text.{TextComponentString, TextComponentTranslation}
 import net.minecraft.world.BossInfo.Overlay
 import net.minecraft.world.BossInfoServer
 
+import java.text.MessageFormat
+
 class SkillInfo(private val skill: SkillInstance) extends BossInfoServer(
-  new TextComponentTranslation(s"skill.${skill.getSkill.getId.getNamespace}.${skill.getSkill.getId.getPath}", skill.getCurrentLevel.toString), skill.getSkill.getColor, Overlay.PROGRESS) {
+  new TextComponentString(
+    MessageFormat.format(
+      new TextComponentTranslation(s"skill.${skill.getSkill.getId.getNamespace}.${skill.getSkill.getId.getPath}").getFormattedText,
+      skill.getCurrentLevel.toString,
+      skill.getCurrentXp.toString,
+      skill.getSkill.getLevelRequiredXp(skill.getCurrentLevel).toString
+    )), skill.getSkill.getColor, Overlay.PROGRESS) {
   private var expireTime: Int = getMaxExpireTime
 
   def getMaxExpireTime: Int = 100
