@@ -4,7 +4,7 @@ import committee.nova.skillful.event.handler.{FMLEventHandler, ForgeEventHandler
 import committee.nova.skillful.network.handler.NetworkHandler
 import committee.nova.skillful.player.capabilities.{ISkills, Skills}
 import committee.nova.skillful.storage.SkillfulStorage
-import committee.nova.skillful.storage.SkillfulStorage.SkillRegisterEvent
+import committee.nova.skillful.storage.SkillfulStorage.{SkillRegisterEvent, SkillRelatedFoodRegisterEvent}
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.common.capabilities.{Capability, CapabilityInject, CapabilityManager}
 import net.minecraftforge.fml.common.Mod
@@ -36,7 +36,8 @@ object Skillful {
 
   @EventHandler def init(e: FMLInitializationEvent): Unit = {
     MinecraftForge.EVENT_BUS.post(new SkillRegisterEvent)
-    SkillfulStorage.freeze()
+    SkillfulStorage.freezeSkillReg()
+    MinecraftForge.EVENT_BUS.post(new SkillRelatedFoodRegisterEvent)
   }
 
   def getLogger: Logger = logger

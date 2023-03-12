@@ -6,14 +6,17 @@ import committee.nova.skillful.api.{IActOnLevelChange, IXPChangesAfterSleep}
 import committee.nova.skillful.event.impl.{SkillLevelEvent, SkillXpEvent}
 import committee.nova.skillful.implicits.Implicits.EntityPlayerImplicit
 import committee.nova.skillful.player.capabilities.Skills
+import committee.nova.skillful.storage.SkillfulStorage
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
 import net.minecraft.init.SoundEvents
+import net.minecraft.item.ItemFood
 import net.minecraft.network.play.server.SPacketSoundEffect
 import net.minecraft.util.text.{Style, TextComponentString, TextComponentTranslation, TextFormatting}
 import net.minecraft.util.{ResourceLocation, SoundCategory}
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.AttachCapabilitiesEvent
+import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent
 import net.minecraftforge.event.entity.player.PlayerEvent.Clone
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
@@ -90,6 +93,16 @@ class ForgeEventHandler {
             )).setStyle(new Style().setColor(if (c > 0) TextFormatting.GREEN else TextFormatting.RED)))
           })
         }
+      case _ =>
+    }
+  }
+
+  @SubscribeEvent
+  def onFoodEaten(e: LivingEntityUseItemEvent.Finish): Unit = {
+    if (!e.getEntityLiving.isInstanceOf[EntityPlayerMP]) return
+    val stack = e.getItem
+    stack.getItem match {
+      case f: ItemFood => SkillfulStorage.applyFoodEffect(e.getEntityLiving.asInstanceOf[EntityPlayerMP], stack)
       case _ =>
     }
   }

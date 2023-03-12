@@ -1,7 +1,10 @@
 package committee.nova.skillful.storage
 
 import committee.nova.skillful.Skillful
-import committee.nova.skillful.api.ISkill
+import committee.nova.skillful.api.{ISkill, ISkillRelatedFood}
+import committee.nova.skillful.implicits.Implicits.EntityPlayerImplicit
+import net.minecraft.entity.player.EntityPlayerMP
+import net.minecraft.item.ItemStack
 import net.minecraft.util.ResourceLocation
 import net.minecraft.world.BossInfo
 import net.minecraftforge.fml.common.eventhandler.Event
@@ -15,8 +18,15 @@ object SkillfulStorage {
     def addSkills(skills: ISkill*): Unit = for (skill <- skills) addSkill(skill)
   }
 
+  class SkillRelatedFoodRegisterEvent extends Event {
+    def addSkillRelatedFood(food: ISkillRelatedFood): Unit = addFood(food)
+
+    def addSkillRelatedFoods(foods: ISkillRelatedFood*): Unit = for (food <- foods) addFood(food)
+  }
+
   private var skillRegistryFrozen = false
   private val skills: mutable.HashSet[ISkill] = new mutable.HashSet[ISkill]()
+  private val foods: mutable.HashSet[ISkillRelatedFood] = new mutable.HashSet[ISkillRelatedFood]()
 
   def getSkill(id: ResourceLocation): ISkill = {
     skills.foreach(s => if (s.getId.equals(id)) return s)
@@ -34,6 +44,8 @@ object SkillfulStorage {
     dummy
   }
 
+  def applyFoodEffect(player: EntityPlayerMP, stack: ItemStack): Unit = foods.foreach(s => if (s.getItemFood.equals(stack.getItem)) player.getSkillStat(s.getRelatedSkill).addXp(player, s.getChange(player, stack)))
+
   private def addSkill(skill: ISkill): Boolean = {
     val logger = Skillful.getLogger
     val skillName = s"skill with id ${skill.getId.toString}"
@@ -46,5 +58,7 @@ object SkillfulStorage {
     success
   }
 
-  def freeze(): Unit = skillRegistryFrozen = true
+  private def addFood(food: ISkillRelatedFood): Unit = foods.add(food)
+
+  def freezeSkillReg(): Unit = skillRegistryFrozen = true
 }
