@@ -6,6 +6,14 @@ import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.util.ResourceLocation
 import net.minecraft.world.BossInfo
 
-class AttributeInfluencingSkill(private val id: ResourceLocation, private val maxLevel: Int, color: BossInfo.Color, attr: IAttribute, modifier: (EntityPlayerMP, SkillInstance) => AttributeModifier) extends Skill(id, maxLevel, color) with IApplyAttributeModifiers {
+import java.util.function.{BiFunction, IntFunction}
+
+class AttributeInfluencingSkill(private val id: ResourceLocation, private val maxLevel: Int, color: BossInfo.Color, fun: Int => Int, attr: IAttribute, modifier: (EntityPlayerMP, SkillInstance) => AttributeModifier) extends Skill(id, maxLevel, color, fun) with IApplyAttributeModifiers {
+  def this(id: ResourceLocation, maxLevel: Int, color: BossInfo.Color, attr: IAttribute, modifier: (EntityPlayerMP, SkillInstance) => AttributeModifier) = this(id, maxLevel, color, i => 100 * i, attr, modifier)
+
+  //Java Compatibility
+  def this(id: ResourceLocation, maxLevel: Int, color: BossInfo.Color, fun: IntFunction[Integer], attr: IAttribute, modifier: BiFunction[EntityPlayerMP, SkillInstance, AttributeModifier]) =
+    this(id, maxLevel, color, i => fun.apply(i), attr, (p, s) => modifier.apply(p, s))
+
   override def getAttributeModifiers(player: EntityPlayerMP, skillInstance: SkillInstance): Map[IAttribute, AttributeModifier] = Map(attr -> modifier.apply(player, skillInstance))
 }
