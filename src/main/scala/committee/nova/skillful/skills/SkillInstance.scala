@@ -31,7 +31,7 @@ class SkillInstance(val skill: ISkill) extends INBTSerializable[NBTTagCompound] 
     _addXp(player, event.getAmount)
   }
 
-  def _addXp(player: EntityPlayerMP, xp: Int): Unit = {
+  protected def _addXp(player: EntityPlayerMP, xp: Int): Unit = {
     if (xp == 0) return
     if (xp < 0) {
       _reduceXp(player, -xp)
@@ -55,7 +55,7 @@ class SkillInstance(val skill: ISkill) extends INBTSerializable[NBTTagCompound] 
     _reduceXp(player, -event.getAmount)
   }
 
-  def _reduceXp(player: EntityPlayerMP, xp: Int): Unit = {
+  protected def _reduceXp(player: EntityPlayerMP, xp: Int): Unit = {
     if (xp == 0) return
     if (xp < 0) {
       _addXp(player, -xp)
