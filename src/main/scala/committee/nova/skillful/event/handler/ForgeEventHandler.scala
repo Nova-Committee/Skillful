@@ -2,6 +2,7 @@ package committee.nova.skillful.event.handler
 
 import committee.nova.skillful.Skillful
 import committee.nova.skillful.Skillful.skillfulCap
+import committee.nova.skillful.api.IActOnLevelChange
 import committee.nova.skillful.event.impl.{SkillLevelEvent, SkillXpEvent}
 import committee.nova.skillful.implicits.Implicits.EntityPlayerMPImplicit
 import committee.nova.skillful.player.capabilities.Skills
@@ -41,18 +42,18 @@ class ForgeEventHandler {
   @SubscribeEvent
   def onXpChanged(event: SkillXpEvent.Post): Unit = {
     if (event.getAmount < 0) return
-    val p = event.getPlayer
-    val instance = event.getSkillInstance
-    val info = p.getSkillInfo(instance.getSkill.getId)
-    info.addPlayer(p)
-    info.setPercent(instance.getCurrentXp * 1F / instance.getSkill.getLevelRequiredXp(instance.getCurrentLevel))
-    info.activate()
+    event.getPlayer.sendSkillInfo(event.getSkillInstance)
   }
 
   @SubscribeEvent
-  def onLevelUp(event: SkillLevelEvent.Up): Unit = {
+  def onLevelChanged(event: SkillLevelEvent): Unit = {
     val player = event.getPlayer
-    player.connection.sendPacket(new SPacketSoundEffect(SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, player.posX, player.posY, player.posZ, 1.0F, 1.0F))
+    val isUp = event.isUp
+    event.getSkillInstance.getSkill match {
+      case c: IActOnLevelChange => c.act(player, event.getSkillInstance, isUp)
+      case _ =>
+    }
+    if (isUp) player.connection.sendPacket(new SPacketSoundEffect(SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, player.posX, player.posY, player.posZ, 1.0F, 1.0F))
   }
 }
 

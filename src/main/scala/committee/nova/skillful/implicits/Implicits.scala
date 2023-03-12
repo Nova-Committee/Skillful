@@ -18,5 +18,7 @@ object Implicits {
     def getSkillInfo(skill: ISkill): SkillInfo = Utilities.getPlayerSkillInfo(player, skill)
 
     def getSkillInfo(id: ResourceLocation): SkillInfo = Utilities.getPlayerSkillInfo(player, id)
+
+    def sendSkillInfo(instance: SkillInstance): Unit = Utilities.sendSkillInfo(player, instance)
   }
 }

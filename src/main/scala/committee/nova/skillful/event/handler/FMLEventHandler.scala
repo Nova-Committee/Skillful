@@ -1,9 +1,11 @@
 package committee.nova.skillful.event.handler
 
+import committee.nova.skillful.api.ICheckOnLogin
 import committee.nova.skillful.implicits.Implicits.EntityPlayerMPImplicit
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraftforge.fml.common.FMLCommonHandler
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent.{Phase, PlayerTickEvent}
 
 object FMLEventHandler {
@@ -16,6 +18,17 @@ class FMLEventHandler {
     if (event.phase == Phase.START) return
     event.player match {
       case p: EntityPlayerMP => p.getSkills.getSkillInfos.foreach(t => if (t.isActive && t.tick()) t.removePlayer(p))
+      case _ =>
+    }
+  }
+
+  @SubscribeEvent
+  def onPlayerLogin(event: PlayerLoggedInEvent): Unit = {
+    event.player match {
+      case p: EntityPlayerMP => p.getSkills.getSkills.foreach(i => i.getSkill match {
+        case l: ICheckOnLogin => l.check(p, i)
+        case _ =>
+      })
       case _ =>
     }
   }

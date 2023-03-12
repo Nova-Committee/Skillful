@@ -6,7 +6,6 @@ import net.minecraft.world.BossInfo
 trait ISkill {
   def getId: ResourceLocation
 
-
   def getColor: BossInfo.Color
 
   def getMaxLevel: Int

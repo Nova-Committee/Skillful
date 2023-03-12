@@ -17,4 +17,11 @@ object Utilities {
   def getPlayerSkillInfo(player: EntityPlayerMP, skill: ISkill): SkillInfo = getPlayerSkills(player).getSkillInfo(player, skill)
 
   def getPlayerSkillInfo(player: EntityPlayerMP, id: ResourceLocation): SkillInfo = getPlayerSkills(player).getSkillInfo(player, id)
+
+  def sendSkillInfo(player: EntityPlayerMP, instance: SkillInstance): Unit = {
+    val info = getPlayerSkillInfo(player, instance.getSkill.getId)
+    info.addPlayer(p)
+    info.setPercent(instance.getCurrentXp * 1F / instance.getSkill.getLevelRequiredXp(instance.getCurrentLevel))
+    info.activate()
+  }
 }
