@@ -20,7 +20,7 @@ object Utilities {
 
   def sendSkillInfo(player: EntityPlayerMP, instance: SkillInstance): Unit = {
     val info = getPlayerSkillInfo(player, instance.getSkill.getId)
-    info.addPlayer(p)
+    info.addPlayer(player)
     info.setPercent(instance.getCurrentXp * 1F / instance.getSkill.getLevelRequiredXp(instance.getCurrentLevel))
     info.activate()
   }
