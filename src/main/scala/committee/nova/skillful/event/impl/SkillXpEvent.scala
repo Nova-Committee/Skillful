@@ -13,6 +13,6 @@ object SkillXpEvent {
   class Post(private val player: EntityPlayerMP, private val skill: SkillInstance, private var amount: Int) extends SkillXpEvent(player, skill, amount)
 }
 
-abstract class SkillXpEvent(private val player: EntityPlayerMP, private val skill: SkillInstance, private var amount: Int) extends SkillEvent(player, skill) {
+class SkillXpEvent(private val player: EntityPlayerMP, private val skill: SkillInstance, private var amount: Int) extends SkillEvent(player, skill) {
   def getAmount: Int = amount
 }
