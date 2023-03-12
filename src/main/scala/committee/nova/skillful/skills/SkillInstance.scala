@@ -21,6 +21,10 @@ class SkillInstance(val skill: ISkill) extends INBTSerializable[NBTTagCompound] 
 
   def isAcquired: Boolean = getCurrentLevel > 0
 
+  def isClueless: Boolean = !isAcquired && currentXp == 0
+
+  def isCompleted: Boolean = getCurrentLevel >= getSkill.getMaxLevel
+
   def addXp(player: EntityPlayerMP, xp: Int): Unit = {
     val event = new SkillXpEvent.Pre(player, this, xp)
     if (MinecraftForge.EVENT_BUS.post(event)) return
@@ -33,6 +37,7 @@ class SkillInstance(val skill: ISkill) extends INBTSerializable[NBTTagCompound] 
       _reduceXp(player, -xp)
       return
     }
+    if (isCompleted) return
     currentXp += xp
     while (currentXp >= skill.getLevelRequiredXp(currentLevel)) {
       currentXp -= skill.getLevelRequiredXp(currentLevel)
@@ -56,6 +61,7 @@ class SkillInstance(val skill: ISkill) extends INBTSerializable[NBTTagCompound] 
       _addXp(player, -xp)
       return
     }
+    if (isClueless) return
     currentXp -= xp
     while (currentXp < 0) {
       currentLevel -= 1
