@@ -25,9 +25,9 @@ object Utilities {
     player match {
       case p: EntityPlayerMP =>
         val info = getPlayerSkillInfo(p, instance.getSkill.getId)
-        info.addPlayer(p)
         info.setPercent(instance.getCurrentXp * 1F / instance.getSkill.getLevelRequiredXp(instance.getCurrentLevel))
         info.activate()
+        info.addPlayer(p)
     }
   }
 

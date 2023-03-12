@@ -42,7 +42,7 @@ class SkillInstance(val skill: ISkill) extends INBTSerializable[NBTTagCompound] 
     while (currentXp >= skill.getLevelRequiredXp(currentLevel)) {
       currentXp -= skill.getLevelRequiredXp(currentLevel)
       currentLevel += 1
-      if (currentLevel > skill.getMaxLevel) cheat(player)
+      if (currentLevel > skill.getMaxLevel) complete()
       else MinecraftForge.EVENT_BUS.post(new SkillLevelEvent.Up(player, this, currentLevel))
     }
     MinecraftForge.EVENT_BUS.post(new SkillXpEvent.Post(player, this, xp))
@@ -76,6 +76,11 @@ class SkillInstance(val skill: ISkill) extends INBTSerializable[NBTTagCompound] 
   def clear(player: EntityPlayerMP): Unit = reduceXp(player, Int.MaxValue)
 
   def cheat(player: EntityPlayerMP): Unit = addXp(player, Int.MaxValue)
+
+  private def complete(): Unit = {
+    currentXp = 0
+    currentLevel = skill.getMaxLevel
+  }
 
   override def serializeNBT(): NBTTagCompound = {
     val tag = new NBTTagCompound
