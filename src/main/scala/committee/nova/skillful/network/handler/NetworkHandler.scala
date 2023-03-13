@@ -1,7 +1,7 @@
 package committee.nova.skillful.network.handler
 
 import committee.nova.skillful.Skillful
-import committee.nova.skillful.network.message.SkillsSyncMessage
+import committee.nova.skillful.network.message.{InfoClearMessage, SkillsSyncMessage}
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.minecraftforge.fml.common.network.NetworkRegistry
 import net.minecraftforge.fml.common.network.simpleimpl.{IMessage, IMessageHandler, SimpleNetworkWrapper}
@@ -12,7 +12,10 @@ object NetworkHandler {
 
   var nextID: Int = 0
 
-  def init(e: FMLPreInitializationEvent): Unit = registerMessage(classOf[MessageHandler.SkillsSyncHandler], classOf[SkillsSyncMessage], Side.CLIENT)
+  def init(e: FMLPreInitializationEvent): Unit = {
+    registerMessage(classOf[MessageHandler.SkillsSyncHandler], classOf[SkillsSyncMessage], Side.CLIENT)
+    registerMessage(classOf[MessageHandler.InfoClearHandler], classOf[InfoClearMessage], Side.CLIENT)
+  }
 
   def registerMessage[REQ <: IMessage, REPLY <: IMessage](msgHandler: Class[_ <: IMessageHandler[REQ, REPLY]], requestMsgType: Class[REQ], side: Side): Unit = {
     nextID += 1

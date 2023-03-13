@@ -1,7 +1,7 @@
 package committee.nova.skillful.network.handler
 
 import committee.nova.skillful.Skillful
-import committee.nova.skillful.network.message.SkillsSyncMessage
+import committee.nova.skillful.network.message.{InfoClearMessage, SkillsSyncMessage}
 import net.minecraft.client.Minecraft
 import net.minecraftforge.fml.common.network.simpleimpl.{IMessage, IMessageHandler, MessageContext}
 import net.minecraftforge.fml.relauncher.Side
@@ -18,6 +18,18 @@ object MessageHandler {
           val skills = player.getCapability(Skillful.skillfulCap, null)
           val storage = Skillful.skillfulCap.getStorage
           storage.readNBT(Skillful.skillfulCap, skills, null, tag)
+        }
+      })
+      null
+    }
+  }
+
+  class InfoClearHandler extends IMessageHandler[InfoClearMessage, IMessage] {
+    override def onMessage(message: InfoClearMessage, ctx: MessageContext): IMessage = {
+      if (ctx.side != Side.CLIENT) return null
+      Minecraft.getMinecraft.addScheduledTask(new Runnable {
+        override def run(): Unit = {
+          Minecraft.getMinecraft.ingameGUI.getBossOverlay.clearBossInfos()
         }
       })
       null

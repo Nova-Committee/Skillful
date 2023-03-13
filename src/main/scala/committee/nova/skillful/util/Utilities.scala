@@ -2,7 +2,7 @@ package committee.nova.skillful.util
 
 import committee.nova.skillful.Skillful
 import committee.nova.skillful.Skillful.skillfulCap
-import committee.nova.skillful.api.skill.ISkill
+import committee.nova.skillful.api.skill.{ICheckOnLogin, ISkill}
 import committee.nova.skillful.impl.skill.instance.SkillInstance
 import committee.nova.skillful.network.handler.NetworkHandler
 import committee.nova.skillful.network.message.SkillsSyncMessage
@@ -37,6 +37,28 @@ object Utilities {
     }
   }
 
+  def clearSkillInfoCache(player: EntityPlayer): Unit = {
+    player match {
+      case p: EntityPlayerMP => {
+        val infos = getPlayerSkills(p).getSkillInfos
+        infos.foreach(i => i.removePlayer(p))
+        infos.clear()
+      }
+      case _ =>
+    }
+
+  }
+
+  def applySkillAttrs(player: EntityPlayer): Unit = {
+    player match {
+      case p: EntityPlayerMP => getPlayerSkills(p).getSkills.foreach(i => i.getSkill match {
+        case l: ICheckOnLogin => l.check(p, i)
+        case _ =>
+      })
+      case _ =>
+    }
+  }
+
   def syncSkills(player: EntityPlayerMP): Unit = {
     if (!player.hasCapability(skillfulCap, null)) return
     val msg = new SkillsSyncMessage
@@ -58,7 +80,7 @@ object Utilities {
   def getSkillDescForCmd(skill: SkillInstance): ITextComponent = {
     skill match {
       case s if (s.isClueless) => new TextComponentString(new TextComponentTranslation(s"skill.${skill.getSkill.getId.getNamespace}.${skill.getSkill.getId.getPath}").getFormattedText
-        + " " + new TextComponentTranslation("status.skillful.clueless").getFormattedText).setStyle(new Style().setColor(TextFormatting.DARK_GRAY))
+        + " " + new TextComponentTranslation("status.skillful.clueless").setStyle(new Style().setColor(TextFormatting.DARK_GRAY)).getFormattedText).setStyle(new Style().setColor(TextFormatting.DARK_GRAY))
       case s if (s.isCompleted) => new TextComponentString(new TextComponentTranslation(s"skill.${skill.getSkill.getId.getNamespace}.${skill.getSkill.getId.getPath}").getFormattedText
         + " " + new TextComponentTranslation("status.skillful.max").getFormattedText).setStyle(new Style().setColor(TextFormatting.GREEN))
       case _ => getSkillDesc(skill)

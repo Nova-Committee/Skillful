@@ -4,3 +4,7 @@ info.skillful.wakeup.increase={0}的经验上涨{1}点
 info.skillful.wakeup.decrease={0}的经验下降{1}点
 status.skillful.clueless=未学习
 status.skillful.max=满级
+msg.skillful.skill.notFound=未找到指定技能！
+msg.skillful.player.notFound=未找到指定玩家！
+msg.skillful.info.cache.clear=技能信息缓存已清除！
+msg.skillful.change.applied=更改已应用！

@@ -6,3 +6,5 @@ status.skillful.clueless=Unlearnt
 status.skillful.max=Max
 msg.skillful.skill.notFound=Skill not found!
 msg.skillful.player.notFound=Player not found!
+msg.skillful.info.cache.clear=Cleared SkillInfo caches!
+msg.skillful.change.applied=Change applied!

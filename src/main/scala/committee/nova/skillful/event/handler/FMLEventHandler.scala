@@ -1,6 +1,5 @@
 package committee.nova.skillful.event.handler
 
-import committee.nova.skillful.api.skill.ICheckOnLogin
 import committee.nova.skillful.implicits.Implicits.EntityPlayerImplicit
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraftforge.fml.common.FMLCommonHandler
@@ -26,18 +25,23 @@ class FMLEventHandler {
   def onPlayerLogin(event: PlayerLoggedInEvent): Unit = {
     event.player match {
       case p: EntityPlayerMP =>
-        p.getSkills.getSkills.foreach(i => i.getSkill match {
-          case l: ICheckOnLogin => l.check(p, i)
-          case _ =>
-        })
+        p.applySkillAttrs()
         p.syncSkills()
       case _ =>
     }
   }
 
   @SubscribeEvent
-  def onPlayerChangedDimension(event: PlayerChangedDimensionEvent): Unit = event.player.syncSkills()
+  def onPlayerChangedDimension(event: PlayerChangedDimensionEvent): Unit = {
+    event.player.clearSkillInfoCache()
+    event.player.syncSkills()
+    event.player.applySkillAttrs()
+  }
 
   @SubscribeEvent
-  def onPlayerRespawn(event: PlayerRespawnEvent): Unit = event.player.syncSkills()
+  def onPlayerRespawn(event: PlayerRespawnEvent): Unit = {
+    event.player.clearSkillInfoCache()
+    event.player.syncSkills()
+    event.player.applySkillAttrs()
+  }
 }

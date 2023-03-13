@@ -22,6 +22,10 @@ object Implicits {
 
     def sendSkillInfo(instance: SkillInstance): Unit = Utilities.sendSkillInfo(player, instance)
 
+    def clearSkillInfoCache(): Unit = Utilities.clearSkillInfoCache(player)
+
+    def applySkillAttrs(): Unit = Utilities.applySkillAttrs(player)
+
     def syncSkills(): Unit = player match {
       case p: EntityPlayerMP => Utilities.syncSkills(p)
       case _ =>

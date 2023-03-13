@@ -66,7 +66,7 @@ class SkillInstance(val skill: ISkill) extends INBTSerializable[NBTTagCompound] 
     while (currentXp < 0) {
       currentLevel -= 1
       currentXp += skill.getLevelRequiredXp(currentLevel)
-      if (currentLevel < 0) clear(player)
+      if (currentLevel < 0) makeClueless()
       else MinecraftForge.EVENT_BUS.post(new SkillLevelEvent.Down(player, this, currentLevel))
     }
     MinecraftForge.EVENT_BUS.post(new SkillXpEvent.Post(player, this, -xp))
@@ -76,6 +76,11 @@ class SkillInstance(val skill: ISkill) extends INBTSerializable[NBTTagCompound] 
   def clear(player: EntityPlayerMP): Unit = reduceXp(player, Int.MaxValue)
 
   def cheat(player: EntityPlayerMP): Unit = addXp(player, Int.MaxValue)
+
+  private def makeClueless(): Unit = {
+    currentXp = 0
+    currentLevel = 0
+  }
 
   private def complete(): Unit = {
     currentXp = 0
