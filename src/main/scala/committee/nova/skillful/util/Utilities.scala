@@ -57,9 +57,9 @@ object Utilities {
   def getSkillDescForCmd(skill: SkillInstance): ITextComponent = {
     skill match {
       case s if (s.isClueless) => new TextComponentString(new TextComponentTranslation(s"skill.${skill.getSkill.getId.getNamespace}.${skill.getSkill.getId.getPath}").getFormattedText
-        + " " + new TextComponentTranslation("status.skillful.clueless")).setStyle(new Style().setColor(TextFormatting.DARK_GRAY))
+        + " " + new TextComponentTranslation("status.skillful.clueless").getFormattedText).setStyle(new Style().setColor(TextFormatting.DARK_GRAY))
       case s if (s.isCompleted) => new TextComponentString(new TextComponentTranslation(s"skill.${skill.getSkill.getId.getNamespace}.${skill.getSkill.getId.getPath}").getFormattedText
-        + " " + new TextComponentTranslation("status.skillful.max")).setStyle(new Style().setColor(TextFormatting.GREEN))
+        + " " + new TextComponentTranslation("status.skillful.max").getFormattedText).setStyle(new Style().setColor(TextFormatting.GREEN))
       case _ => getSkillDesc(skill)
     }
   }

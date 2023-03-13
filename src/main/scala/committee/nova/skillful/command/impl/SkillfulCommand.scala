@@ -1,5 +1,6 @@
 package committee.nova.skillful.command.impl
 
+import com.google.common.collect.ImmutableList
 import committee.nova.skillful.command.impl.SkillfulCommand.{ShowCommand, ShowSelfCommand}
 import committee.nova.skillful.implicits.Implicits.EntityPlayerImplicit
 import committee.nova.skillful.storage.SkillfulStorage
@@ -8,9 +9,11 @@ import net.minecraft.command.{CommandBase, ICommandSender}
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.ResourceLocation
+import net.minecraft.util.math.BlockPos
 import net.minecraft.util.text.{Style, TextComponentString, TextComponentTranslation, TextFormatting}
 import net.minecraftforge.server.command.CommandTreeBase
 
+import java.util
 import scala.collection.JavaConverters.collectionAsScalaIterableConverter
 import scala.util.Try
 
@@ -38,6 +41,10 @@ object SkillfulCommand {
         case _ => player.sendMessage(new TextComponentString(getUsage(player)))
       }
     }
+
+    override def getTabCompletions(server: MinecraftServer, sender: ICommandSender, args: Array[String], targetPos: BlockPos): util.List[String] = {
+      if (args.length != 1) ImmutableList.of() else CommandBase.getListOfStringsMatchingLastWord(args, SkillfulStorage.getSkills.map(s => s.getId.toString).toArray: _*)
+    }
   }
 
   class ShowCommand extends CommandBase {
@@ -63,6 +70,14 @@ object SkillfulCommand {
         }
         case None => sender.sendMessage(new TextComponentTranslation("msg.skillful.player.notFound"))
       }
+    }
+
+    override def getTabCompletions(server: MinecraftServer, sender: ICommandSender, args: Array[String], targetPos: BlockPos): util.List[String] = {
+      CommandBase.getListOfStringsMatchingLastWord(args, (args.length match {
+        case 1 => server.getPlayerList.getOnlinePlayerNames
+        case 2 => SkillfulStorage.getSkills.map(s => s.getId.toString).toArray
+        case _ => Array("")
+      }): _*)
     }
   }
 }
