@@ -31,6 +31,7 @@ object Utilities {
       case p: EntityPlayerMP =>
         val info = getPlayerSkillInfo(p, instance.getSkill.getId)
         info.setPercent(instance.getCurrentXp * 1F / instance.getSkill.getLevelRequiredXp(instance.getCurrentLevel))
+        info.setName(Utilities.getSkillDesc(instance))
         info.activate()
         info.addPlayer(p)
     }
