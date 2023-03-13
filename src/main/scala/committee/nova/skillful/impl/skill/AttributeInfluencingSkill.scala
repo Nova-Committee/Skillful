@@ -1,6 +1,7 @@
-package committee.nova.skillful.skills
+package committee.nova.skillful.impl.skill
 
-import committee.nova.skillful.api.IApplyAttributeModifiers
+import committee.nova.skillful.api.skill.IApplyAttributeModifiers
+import committee.nova.skillful.impl.skill.instance.SkillInstance
 import net.minecraft.entity.ai.attributes.{AttributeModifier, IAttribute}
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.util.ResourceLocation

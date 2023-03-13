@@ -2,11 +2,12 @@ package committee.nova.skillful.util
 
 import committee.nova.skillful.Skillful
 import committee.nova.skillful.Skillful.skillfulCap
-import committee.nova.skillful.api.ISkill
+import committee.nova.skillful.api.skill.ISkill
+import committee.nova.skillful.impl.skill.instance.SkillInstance
 import committee.nova.skillful.network.handler.NetworkHandler
 import committee.nova.skillful.network.message.SkillsSyncMessage
-import committee.nova.skillful.player.capabilities.{ISkills, SkillInfo}
-import committee.nova.skillful.skills.SkillInstance
+import committee.nova.skillful.player.capabilities.api.ISkills
+import committee.nova.skillful.player.capabilities.info.SkillInfo
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
 import net.minecraft.util.ResourceLocation
 

@@ -1,6 +1,6 @@
 package committee.nova.skillful.event.handler
 
-import committee.nova.skillful.api.ICheckOnLogin
+import committee.nova.skillful.api.skill.ICheckOnLogin
 import committee.nova.skillful.implicits.Implicits.EntityPlayerImplicit
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraftforge.fml.common.FMLCommonHandler
@@ -25,13 +25,12 @@ class FMLEventHandler {
   @SubscribeEvent
   def onPlayerLogin(event: PlayerLoggedInEvent): Unit = {
     event.player match {
-      case p: EntityPlayerMP => {
+      case p: EntityPlayerMP =>
         p.getSkills.getSkills.foreach(i => i.getSkill match {
           case l: ICheckOnLogin => l.check(p, i)
           case _ =>
         })
         p.syncSkills()
-      }
       case _ =>
     }
   }

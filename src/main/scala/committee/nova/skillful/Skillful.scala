@@ -2,7 +2,8 @@ package committee.nova.skillful
 
 import committee.nova.skillful.event.handler.{FMLEventHandler, ForgeEventHandler}
 import committee.nova.skillful.network.handler.NetworkHandler
-import committee.nova.skillful.player.capabilities.{ISkills, Skills}
+import committee.nova.skillful.player.capabilities.api.ISkills
+import committee.nova.skillful.player.capabilities.impl.Skills
 import committee.nova.skillful.storage.SkillfulStorage
 import committee.nova.skillful.storage.SkillfulStorage.{SkillRegisterEvent, SkillRelatedFoodRegisterEvent}
 import net.minecraftforge.common.MinecraftForge

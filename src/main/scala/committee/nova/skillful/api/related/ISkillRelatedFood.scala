@@ -1,5 +1,6 @@
-package committee.nova.skillful.api
+package committee.nova.skillful.api.related
 
+import committee.nova.skillful.api.skill.ISkill
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.item.{ItemFood, ItemStack}
 

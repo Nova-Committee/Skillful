@@ -1,6 +1,6 @@
-package committee.nova.skillful.player.capabilities
+package committee.nova.skillful.player.capabilities.info
 
-import committee.nova.skillful.skills.SkillInstance
+import committee.nova.skillful.impl.skill.instance.SkillInstance
 import net.minecraft.util.text.{TextComponentString, TextComponentTranslation}
 import net.minecraft.world.BossInfo.Overlay
 import net.minecraft.world.BossInfoServer

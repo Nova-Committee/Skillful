@@ -6,11 +6,15 @@ plugins {
 
 
 group = 'committee.nova'
-version = '0.0.1.6'
+version = '0.0.2.0'
 
 java {
     archivesBaseName = 'Skillful-Forge-1.12.2'
     //toolchain.languageVersion = JavaLanguageVersion.of(8)
+}
+
+compileScala {
+    targetCompatibility = sourceCompatibility = '1.6'
 }
 
 minecraft {

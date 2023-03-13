@@ -2,10 +2,10 @@ package committee.nova.skillful.event.handler
 
 import committee.nova.skillful.Skillful
 import committee.nova.skillful.Skillful.skillfulCap
-import committee.nova.skillful.api.{IActOnLevelChange, IXPChangesAfterSleep}
+import committee.nova.skillful.api.skill.{IActOnLevelChange, IXPChangesAfterSleep}
 import committee.nova.skillful.event.impl.{SkillLevelEvent, SkillXpEvent}
 import committee.nova.skillful.implicits.Implicits.EntityPlayerImplicit
-import committee.nova.skillful.player.capabilities.Skills
+import committee.nova.skillful.player.capabilities.impl.Skills
 import committee.nova.skillful.storage.SkillfulStorage
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
@@ -61,7 +61,7 @@ class ForgeEventHandler {
       case c: IActOnLevelChange => c.act(player, event.getSkillInstance, isUp)
       case _ =>
     }
-    if (isUp) player.connection.sendPacket(new SPacketSoundEffect(SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, player.posX, player.posY, player.posZ, 1.0F, 1.0F))
+    if (isUp && event.getSkillInstance.getCurrentLevel != 1) player.connection.sendPacket(new SPacketSoundEffect(SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, player.posX, player.posY, player.posZ, 1.0F, 1.0F))
   }
 
   @SubscribeEvent
@@ -72,13 +72,12 @@ class ForgeEventHandler {
       case p: EntityPlayerMP =>
         p.getSkills.getSkills.foreach(i => {
           i.getSkill match {
-            case x: IXPChangesAfterSleep => {
+            case x: IXPChangesAfterSleep =>
               val v = x.change(p, i)
               if (v != 0) {
                 i.addXp(p, x.change(p, i))
                 buffer.+=((x.getId, v))
               }
-            }
             case _ =>
           }
         })
@@ -102,7 +101,7 @@ class ForgeEventHandler {
     if (!e.getEntityLiving.isInstanceOf[EntityPlayerMP]) return
     val stack = e.getItem
     stack.getItem match {
-      case f: ItemFood => SkillfulStorage.applyFoodEffect(e.getEntityLiving.asInstanceOf[EntityPlayerMP], stack)
+      case _: ItemFood => SkillfulStorage.applyFoodEffect(e.getEntityLiving.asInstanceOf[EntityPlayerMP], stack)
       case _ =>
     }
   }

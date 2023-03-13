@@ -1,7 +1,8 @@
 package committee.nova.skillful.storage
 
 import committee.nova.skillful.Skillful
-import committee.nova.skillful.api.{ISkill, ISkillRelatedFood}
+import committee.nova.skillful.api.related.ISkillRelatedFood
+import committee.nova.skillful.api.skill.ISkill
 import committee.nova.skillful.implicits.Implicits.EntityPlayerImplicit
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.item.ItemStack

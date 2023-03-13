@@ -1,6 +1,6 @@
-package committee.nova.skillful.skills
+package committee.nova.skillful.impl.skill.instance
 
-import committee.nova.skillful.api.ISkill
+import committee.nova.skillful.api.skill.ISkill
 import committee.nova.skillful.event.impl.{SkillLevelEvent, SkillXpEvent}
 import committee.nova.skillful.implicits.Implicits.EntityPlayerImplicit
 import net.minecraft.entity.player.EntityPlayerMP

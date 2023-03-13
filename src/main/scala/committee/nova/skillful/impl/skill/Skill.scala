@@ -1,6 +1,6 @@
-package committee.nova.skillful.skills
+package committee.nova.skillful.impl.skill
 
-import committee.nova.skillful.api.ISkill
+import committee.nova.skillful.api.skill.ISkill
 import net.minecraft.util.ResourceLocation
 import net.minecraft.world.BossInfo
 
