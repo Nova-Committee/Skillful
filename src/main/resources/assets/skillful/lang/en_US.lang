@@ -2,3 +2,7 @@ info.skillful.skillinfo.format={0} LVL.{1}: {2} / {3}
 info.skillful.wakeup.summary=After a sweet sleep, your skills have changed as follows:
 info.skillful.wakeup.increase=The XP of {0} has increased by {1}
 info.skillful.wakeup.decrease=The XP of {0} has decreased by {1}
+status.skillful.clueless=Unlearnt
+status.skillful.max=Max
+msg.skillful.skill.notFound=Skill not found!
+msg.skillful.player.notFound=Player not found!

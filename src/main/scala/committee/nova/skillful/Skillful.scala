@@ -1,5 +1,6 @@
 package committee.nova.skillful
 
+import committee.nova.skillful.command.init.CommandHandler
 import committee.nova.skillful.event.handler.{FMLEventHandler, ForgeEventHandler}
 import committee.nova.skillful.network.handler.NetworkHandler
 import committee.nova.skillful.player.capabilities.api.ISkills
@@ -10,7 +11,7 @@ import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.common.capabilities.{Capability, CapabilityInject, CapabilityManager}
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.Mod.EventHandler
-import net.minecraftforge.fml.common.event.{FMLInitializationEvent, FMLPreInitializationEvent}
+import net.minecraftforge.fml.common.event.{FMLInitializationEvent, FMLPreInitializationEvent, FMLServerStartingEvent}
 import org.apache.logging.log4j.Logger
 
 import java.util.concurrent.Callable
@@ -19,6 +20,8 @@ import java.util.concurrent.Callable
 object Skillful {
   final val MODID = "skillful"
   private var logger: Logger = _
+
+  def getLogger: Logger = logger
 
   @CapabilityInject(classOf[ISkills])
   def setCap(cap: Capability[ISkills]): Unit = skillfulCap = cap
@@ -41,5 +44,5 @@ object Skillful {
     MinecraftForge.EVENT_BUS.post(new SkillRelatedFoodRegisterEvent)
   }
 
-  def getLogger: Logger = logger
+  @EventHandler def serverStarting(e: FMLServerStartingEvent): Unit = CommandHandler.init(e)
 }

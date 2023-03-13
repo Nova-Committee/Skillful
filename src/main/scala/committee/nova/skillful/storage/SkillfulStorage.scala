@@ -29,6 +29,8 @@ object SkillfulStorage {
   private val skills: mutable.HashSet[ISkill] = new mutable.HashSet[ISkill]()
   private val foods: mutable.HashSet[ISkillRelatedFood] = new mutable.HashSet[ISkillRelatedFood]()
 
+  def getSkills: Array[ISkill] = skills.toArray
+
   def getSkill(id: ResourceLocation): ISkill = {
     skills.foreach(s => if (s.getId.equals(id)) return s)
     val dummy = new ISkill {
@@ -43,6 +45,11 @@ object SkillfulStorage {
     skills.add(dummy)
     Skillful.getLogger.warn(s"Skill with id $id not found. Registered a dummy one instead...")
     dummy
+  }
+
+  def getSkillStrictly(id: ResourceLocation): Option[ISkill] = {
+    skills.foreach(s => if (s.getId.equals(id)) return Some(s))
+    None
   }
 
   def applyFoodEffect(player: EntityPlayerMP, stack: ItemStack): Unit = foods.foreach(s =>

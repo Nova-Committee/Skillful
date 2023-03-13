@@ -9,7 +9,11 @@ import committee.nova.skillful.network.message.SkillsSyncMessage
 import committee.nova.skillful.player.capabilities.api.ISkills
 import committee.nova.skillful.player.capabilities.info.SkillInfo
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
+import net.minecraft.server.MinecraftServer
 import net.minecraft.util.ResourceLocation
+import net.minecraft.util.text._
+
+import java.text.MessageFormat
 
 object Utilities {
   def getPlayerSkills(player: EntityPlayer): ISkills = player.getCapability(Skillful.skillfulCap, null)
@@ -38,4 +42,27 @@ object Utilities {
     msg.getTag.setTag("skills", skillfulCap.getStorage.writeNBT(skillfulCap, player.getCapability(skillfulCap, null), null))
     NetworkHandler.instance.sendTo(msg, player)
   }
+
+  def getSkillDesc(skill: SkillInstance): ITextComponent = {
+    new TextComponentString(
+      MessageFormat.format(
+        new TextComponentTranslation("info.skillful.skillinfo.format").getFormattedText,
+        new TextComponentTranslation(s"skill.${skill.getSkill.getId.getNamespace}.${skill.getSkill.getId.getPath}").getFormattedText,
+        skill.getCurrentLevel.toString,
+        skill.getCurrentXp.toString,
+        skill.getSkill.getLevelRequiredXp(skill.getCurrentLevel).toString
+      ))
+  }
+
+  def getSkillDescForCmd(skill: SkillInstance): ITextComponent = {
+    skill match {
+      case s if (s.isClueless) => new TextComponentString(new TextComponentTranslation(s"skill.${skill.getSkill.getId.getNamespace}.${skill.getSkill.getId.getPath}").getFormattedText
+        + " " + new TextComponentTranslation("status.skillful.clueless")).setStyle(new Style().setColor(TextFormatting.DARK_GRAY))
+      case s if (s.isCompleted) => new TextComponentString(new TextComponentTranslation(s"skill.${skill.getSkill.getId.getNamespace}.${skill.getSkill.getId.getPath}").getFormattedText
+        + " " + new TextComponentTranslation("status.skillful.max")).setStyle(new Style().setColor(TextFormatting.GREEN))
+      case _ => getSkillDesc(skill)
+    }
+  }
+
+  def getPlayer(server: MinecraftServer, name: String): Option[EntityPlayerMP] = Option(server.getPlayerList.getPlayerByUsername(name))
 }
