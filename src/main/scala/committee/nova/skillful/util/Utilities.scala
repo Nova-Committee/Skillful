@@ -82,7 +82,7 @@ object Utilities {
       case s if (s.isClueless) => new TextComponentString(new TextComponentTranslation(s"skill.${skill.getSkill.getId.getNamespace}.${skill.getSkill.getId.getPath}").getFormattedText
         + " " + new TextComponentTranslation("status.skillful.clueless").setStyle(new Style().setColor(TextFormatting.DARK_GRAY)).getFormattedText).setStyle(new Style().setColor(TextFormatting.DARK_GRAY))
       case s if (s.isCompleted) => new TextComponentString(new TextComponentTranslation(s"skill.${skill.getSkill.getId.getNamespace}.${skill.getSkill.getId.getPath}").getFormattedText
-        + " " + new TextComponentTranslation("status.skillful.max").getFormattedText).setStyle(new Style().setColor(TextFormatting.GREEN))
+        + " " + new TextComponentTranslation("status.skillful.max").setStyle(new Style().setColor(TextFormatting.GREEN)).getFormattedText).setStyle(new Style().setColor(TextFormatting.GREEN))
       case _ => getSkillDesc(skill)
     }
   }

@@ -1,4 +1,4 @@
-info.skillful.skillinfo.format={0} 等级{1}：{2} / {3}
+info.skillful.skillinfo.format={0} 等级 {1} ： {2} / {3}
 info.skillful.wakeup.summary=睡了甜美的一觉后，你的技能发生了如下变化：
 info.skillful.wakeup.increase={0}的经验上涨{1}点
 info.skillful.wakeup.decrease={0}的经验下降{1}点
