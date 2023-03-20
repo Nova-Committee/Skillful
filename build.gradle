@@ -6,7 +6,7 @@ plugins {
 
 
 group = 'committee.nova'
-version = '0.0.3.0'
+version = '0.0.3.1'
 
 java {
     archivesBaseName = 'Skillful-Forge-1.12.2'

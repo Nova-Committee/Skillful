@@ -88,7 +88,7 @@ class ForgeEventHandler {
             p.sendMessage(new TextComponentString(MessageFormat.format(
               new TextComponentTranslation(s"info.skillful.wakeup.${if (c > 0) "increase" else "decrease"}").getFormattedText,
               new TextComponentTranslation(s"skill.${x._1.getNamespace}.${x._1.getPath}").getFormattedText,
-              c.toString
+              c.abs.toString
             )).setStyle(new Style().setColor(if (c > 0) TextFormatting.GREEN else TextFormatting.RED)))
           })
         }
