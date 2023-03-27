@@ -40,7 +40,7 @@ object Skillful {
 
   @EventHandler def init(e: FMLInitializationEvent): Unit = {
     MinecraftForge.EVENT_BUS.post(new SkillRegisterEvent)
-    SkillfulStorage.freezeSkillReg()
+    SkillfulStorage.setAfterInit()
     MinecraftForge.EVENT_BUS.post(new SkillRelatedFoodRegisterEvent)
   }
 

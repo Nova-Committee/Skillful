@@ -25,8 +25,8 @@ object SkillfulStorage {
     def addSkillRelatedFoods(foods: ISkillRelatedFood*): Unit = for (food <- foods) addFood(food)
   }
 
-  private var skillRegistryFrozen = false
-  private val skills: mutable.HashSet[ISkill] = new mutable.HashSet[ISkill]()
+  private var afterInit = false
+  private val skills: mutable.LinkedHashSet[ISkill] = new mutable.LinkedHashSet[ISkill]()
   private val foods: mutable.HashSet[ISkillRelatedFood] = new mutable.HashSet[ISkillRelatedFood]()
 
   def getSkills: Array[ISkill] = skills.toArray
@@ -53,16 +53,12 @@ object SkillfulStorage {
   }
 
   def applyFoodEffect(player: EntityPlayerMP, stack: ItemStack): Unit = foods.foreach(s =>
-    if (s.getItemFood.equals(stack.getItem)) s.getChange(player, stack).foreach(
-      x => player.getSkillStat(x._1).addXp(player, x._2)))
+    if (s.getItemFood.equals(stack.getItem)) s.getChange(player, stack).foreach(x => player.getSkillStat(x._1).addXp(player, x._2)))
 
   private def addSkill(skill: ISkill): Boolean = {
     val logger = Skillful.getLogger
     val skillName = s"skill with id ${skill.getId.toString}"
-    if (skillRegistryFrozen) {
-      logger.error(s"Skill registry already frozen! Failed to register $skillName!")
-      return false
-    }
+    if (afterInit) logger.warn(s"$skillName registration is out of preInit lifecycle!")
     val success = skills.add(skill)
     if (success) logger.info(s"Registered $skillName!") else logger.error(s"Failed to register duplicate $skillName!")
     success
@@ -70,5 +66,5 @@ object SkillfulStorage {
 
   private def addFood(food: ISkillRelatedFood): Unit = foods.add(food)
 
-  def freezeSkillReg(): Unit = skillRegistryFrozen = true
+  def setAfterInit(): Unit = afterInit = true
 }

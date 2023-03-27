@@ -38,7 +38,7 @@ object SkillfulCommand {
           SkillfulStorage.getSkillStrictly(Try(new ResourceLocation(args(0))).getOrElse(new ResourceLocation("invalidInvalid"))) match {
             case Some(x) => {
               player.sendMessage(Utilities.getSkillDescForCmd(player.getSkillStat(x)))
-              player.sendSkillInfo(player.getSkillStat(x))
+              player.sendSkillInfo(player.getSkillStat(x), 0)
             }
             case None => player.sendMessage(new TextComponentTranslation("msg.skillful.skill.notFound")
               .setStyle(new Style().setColor(TextFormatting.DARK_RED)))

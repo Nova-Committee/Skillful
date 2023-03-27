@@ -6,7 +6,8 @@ plugins {
 
 
 group = 'committee.nova'
-version = '0.0.3.1'
+version = '0.0.3.2'
+def mcVersion = "1.12.2"
 
 java {
     archivesBaseName = 'Skillful-Forge-1.12.2'
@@ -102,6 +103,26 @@ jar {
                 "Implementation-Vendor"   : "Tapio",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
+    }
+}
+
+processResources {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", mcVersion
+
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+
+        // replace version and mcversion
+        expand 'version': project.version, 'mcversion': mcVersion
+    }
+
+    // copy everything else except the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
     }
 }
 

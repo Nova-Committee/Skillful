@@ -48,10 +48,7 @@ class ForgeEventHandler {
   }
 
   @SubscribeEvent
-  def onXpChanged(event: SkillXpEvent.Post): Unit = {
-    if (event.getAmount < 0) return
-    event.getPlayer.sendSkillInfo(event.getSkillInstance)
-  }
+  def onXpChanged(event: SkillXpEvent.Post): Unit = event.getPlayer.sendSkillInfo(event.getSkillInstance, event.getAmount)
 
   @SubscribeEvent
   def onLevelChanged(event: SkillLevelEvent): Unit = {

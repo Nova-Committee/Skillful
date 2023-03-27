@@ -5,7 +5,7 @@ import committee.nova.skillful.util.Utilities
 import net.minecraft.world.BossInfo.Overlay
 import net.minecraft.world.BossInfoServer
 
-class SkillInfo(private val skill: SkillInstance) extends BossInfoServer(Utilities.getSkillDesc(skill), skill.getSkill.getColor, Overlay.PROGRESS) {
+class SkillInfo(private val skill: SkillInstance) extends BossInfoServer(Utilities.getSkillDesc(skill, 0), skill.getSkill.getColor, Overlay.PROGRESS) {
   private var expireTime: Int = getMaxExpireTime
 
   def getMaxExpireTime: Int = 100

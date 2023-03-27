@@ -26,12 +26,12 @@ object Utilities {
 
   def getPlayerSkillInfo(player: EntityPlayer, id: ResourceLocation): SkillInfo = getPlayerSkills(player).getSkillInfo(player, id)
 
-  def sendSkillInfo(player: EntityPlayer, instance: SkillInstance): Unit = {
+  def sendSkillInfo(player: EntityPlayer, instance: SkillInstance, change: Int): Unit = {
     player match {
       case p: EntityPlayerMP =>
         val info = getPlayerSkillInfo(p, instance.getSkill.getId)
         info.setPercent(instance.getCurrentXp * 1F / instance.getSkill.getLevelRequiredXp(instance.getCurrentLevel))
-        info.setName(Utilities.getSkillDesc(instance))
+        info.setName(Utilities.getSkillDesc(instance, change))
         info.activate()
         info.addPlayer(p)
     }
@@ -66,14 +66,15 @@ object Utilities {
     NetworkHandler.instance.sendTo(msg, player)
   }
 
-  def getSkillDesc(skill: SkillInstance): ITextComponent = {
+  def getSkillDesc(skill: SkillInstance, change: Int): ITextComponent = {
     new TextComponentString(
       MessageFormat.format(
         new TextComponentTranslation("info.skillful.skillinfo.format").getFormattedText,
         new TextComponentTranslation(s"skill.${skill.getSkill.getId.getNamespace}.${skill.getSkill.getId.getPath}").getFormattedText,
         skill.getCurrentLevel.toString,
         skill.getCurrentXp.toString,
-        skill.getSkill.getLevelRequiredXp(skill.getCurrentLevel).toString
+        skill.getSkill.getLevelRequiredXp(skill.getCurrentLevel).toString,
+        if (change == 0) "" else if (change > 0) s"+${change.toString}" else change.toString
       ))
   }
 
@@ -83,7 +84,7 @@ object Utilities {
         + " " + new TextComponentTranslation("status.skillful.clueless").setStyle(new Style().setColor(TextFormatting.DARK_GRAY)).getFormattedText).setStyle(new Style().setColor(TextFormatting.DARK_GRAY))
       case s if (s.isCompleted) => new TextComponentString(new TextComponentTranslation(s"skill.${skill.getSkill.getId.getNamespace}.${skill.getSkill.getId.getPath}").getFormattedText
         + " " + new TextComponentTranslation("status.skillful.max").setStyle(new Style().setColor(TextFormatting.GREEN)).getFormattedText).setStyle(new Style().setColor(TextFormatting.GREEN))
-      case _ => getSkillDesc(skill)
+      case _ => getSkillDesc(skill, 0)
     }
   }
 
