@@ -2,7 +2,6 @@ package committee.nova.skillful.event.handler
 
 import committee.nova.skillful.Skillful
 import committee.nova.skillful.Skillful.skillfulCap
-import committee.nova.skillful.api.skill.{IActOnLevelChange, IXPChangesAfterSleep}
 import committee.nova.skillful.event.impl.{SkillLevelEvent, SkillXpEvent}
 import committee.nova.skillful.implicits.Implicits.EntityPlayerImplicit
 import committee.nova.skillful.player.capabilities.impl.Skills
@@ -55,7 +54,7 @@ class ForgeEventHandler {
     val player = event.getPlayer
     val isUp = event.isUp
     event.getSkillInstance.getSkill match {
-      case c: IActOnLevelChange => c.act(player, event.getSkillInstance, isUp)
+      case c if (c.shouldActOnLevelChange) => c.actOnLevelChange(player, event.getSkillInstance, isUp)
       case _ =>
     }
     if (isUp && event.getSkillInstance.getCurrentLevel != 1) player.connection.sendPacket(new SPacketSoundEffect(SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, player.posX, player.posY, player.posZ, 1.0F, 1.0F))
@@ -69,10 +68,10 @@ class ForgeEventHandler {
       case p: EntityPlayerMP =>
         p.getSkills.getSkills.foreach(i => {
           i.getSkill match {
-            case x: IXPChangesAfterSleep =>
-              val v = x.change(p, i)
+            case x if (x.shouldChangeXPAfterSleep) =>
+              val v = x.changeXPAfterSleep(p, i)
               if (v != 0) {
-                i.addXp(p, x.change(p, i))
+                i.addXp(p, v)
                 buffer.+=((x.getId, v))
               }
             case _ =>

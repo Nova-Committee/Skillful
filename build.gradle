@@ -6,7 +6,7 @@ plugins {
 
 
 group = 'committee.nova'
-version = '0.0.3.2'
+version = '0.0.3.3'
 def mcVersion = "1.12.2"
 
 java {

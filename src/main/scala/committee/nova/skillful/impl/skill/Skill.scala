@@ -6,6 +6,7 @@ import net.minecraft.world.BossInfo
 
 import java.util.function.IntFunction
 
+@Deprecated
 class Skill(private val id: ResourceLocation, private val maxLevel: Int, color: BossInfo.Color) extends ISkill {
   private var fun: Int => Int = i => 100 * i
 

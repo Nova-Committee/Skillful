@@ -2,7 +2,7 @@ package committee.nova.skillful.util
 
 import committee.nova.skillful.Skillful
 import committee.nova.skillful.Skillful.skillfulCap
-import committee.nova.skillful.api.skill.{ICheckOnLogin, ISkill}
+import committee.nova.skillful.api.skill.ISkill
 import committee.nova.skillful.impl.skill.instance.SkillInstance
 import committee.nova.skillful.network.handler.NetworkHandler
 import committee.nova.skillful.network.message.SkillsSyncMessage
@@ -52,7 +52,7 @@ object Utilities {
   def applySkillAttrs(player: EntityPlayer): Unit = {
     player match {
       case p: EntityPlayerMP => getPlayerSkills(p).getSkills.foreach(i => i.getSkill match {
-        case l: ICheckOnLogin => l.check(p, i)
+        case l if (l.shouldCheckOnLogin) => l.checkOnLogin(p, i)
         case _ =>
       })
       case _ =>
