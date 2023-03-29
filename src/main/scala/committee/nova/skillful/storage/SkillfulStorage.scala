@@ -52,6 +52,19 @@ object SkillfulStorage {
     None
   }
 
+  def getSkillCleanly(id: ResourceLocation): ISkill = {
+    skills.foreach(s => if (s.getId.equals(id)) return s)
+    new ISkill {
+      override def getId: ResourceLocation = id
+
+      override def getMaxLevel: Int = Int.MaxValue
+
+      override def getLevelRequiredXp(level: Int): Int = Int.MaxValue
+
+      override def getColor: BossInfo.Color = BossInfo.Color.WHITE
+    }
+  }
+
   def applyFoodEffect(player: EntityPlayerMP, stack: ItemStack): Unit = foods.foreach(s =>
     if (s.getItemFood.equals(stack.getItem)) s.getChange(player, stack).foreach(x => player.getSkillStat(x._1).addXp(player, x._2)))
 

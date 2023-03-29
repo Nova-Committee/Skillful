@@ -16,6 +16,12 @@ object Implicits {
 
     def getSkillStat(id: ResourceLocation): SkillInstance = Utilities.getPlayerSkillStat(player, id)
 
+    def getSkillStatStrictly(id: ResourceLocation): Option[SkillInstance] = Utilities.getPlayerSkillStatStrictly(player, id)
+
+    def getSkillStatCleanly(id: ResourceLocation): Option[SkillInstance] = Utilities.getPlayerSkillStatCleanly(player, id)
+
+    def getSkillStatCleanly(skill: ISkill): Option[SkillInstance] = Utilities.getPlayerSkillStatCleanly(player, skill)
+
     def getSkillInfo(skill: ISkill): SkillInfo = Utilities.getPlayerSkillInfo(player, skill)
 
     def getSkillInfo(id: ResourceLocation): SkillInfo = Utilities.getPlayerSkillInfo(player, id)

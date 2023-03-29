@@ -21,4 +21,18 @@ trait ISkills {
   def getSkill(skill: ISkill): SkillInstance
 
   def getSkill(id: ResourceLocation): SkillInstance = getSkill(SkillfulStorage.getSkill(id))
+
+  def getSkillStrictly(id: ResourceLocation): Option[SkillInstance] = SkillfulStorage.getSkillStrictly(id) match {
+    case Some(s) => Some(getSkill(s))
+    case None => None
+  }
+
+  def getSkillCleanly(skill: ISkill): Option[SkillInstance]
+
+  def getSkillCleanly(id: ResourceLocation): Option[SkillInstance] = getSkillCleanly(SkillfulStorage.getSkillCleanly(id))
+
+  def removeSkill(id: ResourceLocation): Boolean
+
+  def removeSkill(skill: ISkill): Boolean = removeSkill(skill.getId)
+
 }

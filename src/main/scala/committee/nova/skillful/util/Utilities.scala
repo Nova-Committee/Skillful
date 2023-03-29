@@ -22,6 +22,12 @@ object Utilities {
 
   def getPlayerSkillStat(player: EntityPlayer, id: ResourceLocation): SkillInstance = getPlayerSkills(player).getSkill(id)
 
+  def getPlayerSkillStatStrictly(player: EntityPlayer, id: ResourceLocation): Option[SkillInstance] = getPlayerSkills(player).getSkillStrictly(id)
+
+  def getPlayerSkillStatCleanly(player: EntityPlayer, id: ResourceLocation): Option[SkillInstance] = getPlayerSkills(player).getSkillCleanly(id)
+
+  def getPlayerSkillStatCleanly(player: EntityPlayer, skill: ISkill): Option[SkillInstance] = getPlayerSkills(player).getSkillCleanly(skill)
+
   def getPlayerSkillInfo(player: EntityPlayer, skill: ISkill): SkillInfo = getPlayerSkills(player).getSkillInfo(player, skill)
 
   def getPlayerSkillInfo(player: EntityPlayer, id: ResourceLocation): SkillInfo = getPlayerSkills(player).getSkillInfo(player, id)

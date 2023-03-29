@@ -74,6 +74,11 @@ object Skills {
       instance
     }
 
+    override def getSkillCleanly(skill: ISkill): Option[SkillInstance] = {
+      skills.foreach(s => if (s.getSkill.equals(skill)) return Some(s))
+      None
+    }
+
     override def getSkillInfos: mutable.HashSet[SkillInfo] = skillInfos
 
     override def getSkillInfo(player: EntityPlayer, skill: ISkill): SkillInfo = {
@@ -81,6 +86,11 @@ object Skills {
       val instance = new SkillInfo(player.getSkillStat(skill))
       skillInfos.add(instance)
       instance
+    }
+
+    override def removeSkill(id: ResourceLocation): Boolean = {
+      skills.foreach(s => if (id.equals(s.getSkill.getId)) return skills.remove(s))
+      false
     }
   }
 }
