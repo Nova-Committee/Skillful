@@ -28,6 +28,10 @@ object Utilities {
 
   def getPlayerSkillStatCleanly(player: EntityPlayer, skill: ISkill): Option[SkillInstance] = getPlayerSkills(player).getSkillCleanly(skill)
 
+  def removePlayerSkill(player: EntityPlayer, id: ResourceLocation): Boolean = getPlayerSkills(player).removeSkill(id)
+
+  def removePlayerSkill(player: EntityPlayer, skill: ISkill): Boolean = getPlayerSkills(player).removeSkill(skill)
+
   def getPlayerSkillInfo(player: EntityPlayer, skill: ISkill): SkillInfo = getPlayerSkills(player).getSkillInfo(player, skill)
 
   def getPlayerSkillInfo(player: EntityPlayer, id: ResourceLocation): SkillInfo = getPlayerSkills(player).getSkillInfo(player, id)

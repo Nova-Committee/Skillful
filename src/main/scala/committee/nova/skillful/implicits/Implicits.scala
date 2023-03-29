@@ -26,6 +26,10 @@ object Implicits {
 
     def getSkillInfo(id: ResourceLocation): SkillInfo = Utilities.getPlayerSkillInfo(player, id)
 
+    def removeSkill(id: ResourceLocation): Boolean = Utilities.removePlayerSkill(player, id)
+
+    def removeSkill(skill: ISkill): Boolean = Utilities.removePlayerSkill(player, skill)
+
     def sendSkillInfo(instance: SkillInstance, change: Int): Unit = Utilities.sendSkillInfo(player, instance, change)
 
     def clearSkillInfoCache(): Unit = Utilities.clearSkillInfoCache(player)
