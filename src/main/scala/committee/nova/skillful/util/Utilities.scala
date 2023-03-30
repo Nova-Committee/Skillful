@@ -84,7 +84,7 @@ object Utilities {
         skill.getCurrentLevel.toString,
         skill.getCurrentXp.toString,
         skill.getSkill.getLevelRequiredXp(skill.getCurrentLevel).toString,
-        if (change == 0) "" else if (change > 0) s"+${change.toString}" else change.toString
+        if (change == 0) "" else if (change > 0) " << " + s"+${change.toString}" else change.toString
       ))
   }
 

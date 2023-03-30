@@ -5,6 +5,7 @@ import committee.nova.skillful.event.impl.{SkillLevelEvent, SkillXpEvent}
 import committee.nova.skillful.implicits.Implicits.EntityPlayerImplicit
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.util.math.MathHelper
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.common.util.INBTSerializable
 
@@ -76,6 +77,15 @@ class SkillInstance(val skill: ISkill) extends INBTSerializable[NBTTagCompound] 
   def clear(player: EntityPlayerMP): Unit = reduceXp(player, Int.MaxValue)
 
   def cheat(player: EntityPlayerMP): Unit = addXp(player, Int.MaxValue)
+
+  def changeLevel(player: EntityPlayerMP, lvl: Int): Unit = {
+    val real = MathHelper.clamp(lvl, 0, skill.getMaxLevel)
+    val old = getCurrentLevel
+    currentLevel = real
+    currentXp = 0
+    if (old == real) return
+    MinecraftForge.EVENT_BUS.post(if (real > old) new SkillLevelEvent.Up(player, this, real) else new SkillLevelEvent.Down(player, this, real))
+  }
 
   private def makeClueless(): Unit = {
     currentXp = 0

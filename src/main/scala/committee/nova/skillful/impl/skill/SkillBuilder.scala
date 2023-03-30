@@ -21,8 +21,8 @@ class SkillBuilder(val id: ResourceLocation) {
   private var shouldCheckOnLogin$: Boolean = false
   private var shouldChangeXPAfterSleep$: Boolean = false
   private var change: (EntityPlayerMP, SkillInstance, Boolean) => Unit = (p, s, i) => {}
-  private var check: (EntityPlayerMP, SkillInstance) => Unit = (p, s) => {}
-  private var sleep: (EntityPlayerMP, SkillInstance) => Int = (p, s) => 0
+  private var check: (EntityPlayerMP, SkillInstance) => Unit = (_, _) => {}
+  private var sleep: (EntityPlayerMP, SkillInstance) => Int = (_, _) => 0
 
   def setMaxLevel(maxLevel: Int): SkillBuilder = {
     this.maxLevel = maxLevel max 1
