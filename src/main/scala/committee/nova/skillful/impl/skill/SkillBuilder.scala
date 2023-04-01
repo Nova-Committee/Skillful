@@ -34,7 +34,7 @@ class SkillBuilder(val id: ResourceLocation) {
     this
   }
 
-  def setLevelRequiredXP(required: IntFunction[Int]): SkillBuilder = {
+  def setLevelRequiredXP(required: IntFunction[Integer]): SkillBuilder = {
     this.required = i => required.apply(i)
     this
   }
