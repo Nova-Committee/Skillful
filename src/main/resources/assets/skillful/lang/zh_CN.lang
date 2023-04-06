@@ -1,7 +1,8 @@
-info.skillful.skillinfo.format={0} 等级 {1} ： {2} / {3}{4}
+info.skillful.skillinfo.format=%1$s 等级 %2$s ： %3$s / %4$s%5$s
+info.skillful.skillinfo.cmd.format=%1$s %2$s
 info.skillful.wakeup.summary=睡了甜美的一觉后，你的技能发生了如下变化：
-info.skillful.wakeup.increase={0}的经验上涨{1}点
-info.skillful.wakeup.decrease={0}的经验下降{1}点
+info.skillful.wakeup.increase=%1$s的经验上涨%2$s点
+info.skillful.wakeup.decrease=%1$s的经验下降%2$s点
 status.skillful.clueless=未学习
 status.skillful.max=满级
 msg.skillful.skill.notFound=未找到指定技能！

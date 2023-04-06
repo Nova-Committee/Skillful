@@ -20,7 +20,7 @@ class SkillBuilder(val id: ResourceLocation) {
   private var shouldActOnLevelChange$: Boolean = false
   private var shouldCheckOnLogin$: Boolean = false
   private var shouldChangeXPAfterSleep$: Boolean = false
-  private var change: (EntityPlayerMP, SkillInstance, Boolean) => Unit = (p, s, i) => {}
+  private var change: (EntityPlayerMP, SkillInstance, Boolean) => Unit = (_, _, _) => {}
   private var check: (EntityPlayerMP, SkillInstance) => Unit = (_, _) => {}
   private var sleep: (EntityPlayerMP, SkillInstance) => Int = (_, _) => 0
 

@@ -1,7 +1,8 @@
-info.skillful.skillinfo.format={0} LVL.{1}: {2} / {3}{4}
+info.skillful.skillinfo.format=%1$s LVL.%2$s: %3$s / %4$s%5$s
+info.skillful.skillinfo.cmd.format=%1$s %2$s
 info.skillful.wakeup.summary=After a sweet sleep, your skills have changed as follows:
-info.skillful.wakeup.increase=The XP of {0} has increased by {1}
-info.skillful.wakeup.decrease=The XP of {0} has decreased by {1}
+info.skillful.wakeup.increase=The XP of %1$s has increased by %2$s
+info.skillful.wakeup.decrease=The XP of %1$s has decreased by %2$s
 status.skillful.clueless=Unlearnt
 status.skillful.max=Max
 msg.skillful.skill.notFound=Skill not found!

@@ -13,8 +13,6 @@ import net.minecraft.server.MinecraftServer
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.text._
 
-import java.text.MessageFormat
-
 object Utilities {
   def getPlayerSkills(player: EntityPlayer): ISkills = player.getCapability(Skillful.skillfulCap, null)
 
@@ -77,23 +75,23 @@ object Utilities {
   }
 
   def getSkillDesc(skill: SkillInstance, change: Int): ITextComponent = {
-    new TextComponentString(
-      MessageFormat.format(
-        new TextComponentTranslation("info.skillful.skillinfo.format").getFormattedText,
-        new TextComponentTranslation(s"skill.${skill.getSkill.getId.getNamespace}.${skill.getSkill.getId.getPath}").getFormattedText,
-        skill.getCurrentLevel.toString,
-        skill.getCurrentXp.toString,
-        skill.getSkill.getLevelRequiredXp(skill.getCurrentLevel).toString,
-        if (change == 0) "" else if (change > 0) " << " + s"+${change.toString}" else change.toString
-      ))
+    new TextComponentTranslation("info.skillful.skillinfo.format", Array(new TextComponentTranslation(s"skill.${skill.getSkill.getId.getNamespace}.${skill.getSkill.getId.getPath}"),
+      skill.getCurrentLevel.toString,
+      skill.getCurrentXp.toString,
+      skill.getSkill.getLevelRequiredXp(skill.getCurrentLevel).toString,
+      if (change == 0) "" else if (change > 0) " << " + s"+${change.toString}" else change.toString): _*)
   }
 
   def getSkillDescForCmd(skill: SkillInstance): ITextComponent = {
     skill match {
-      case s if (s.isClueless) => new TextComponentString(new TextComponentTranslation(s"skill.${skill.getSkill.getId.getNamespace}.${skill.getSkill.getId.getPath}").getFormattedText
-        + " " + new TextComponentTranslation("status.skillful.clueless").setStyle(new Style().setColor(TextFormatting.DARK_GRAY)).getFormattedText).setStyle(new Style().setColor(TextFormatting.DARK_GRAY))
-      case s if (s.isCompleted) => new TextComponentString(new TextComponentTranslation(s"skill.${skill.getSkill.getId.getNamespace}.${skill.getSkill.getId.getPath}").getFormattedText
-        + " " + new TextComponentTranslation("status.skillful.max").setStyle(new Style().setColor(TextFormatting.GREEN)).getFormattedText).setStyle(new Style().setColor(TextFormatting.GREEN))
+      case s if (s.isClueless) => new TextComponentTranslation("info.skillful.skillinfo.cmd.format",
+        new TextComponentTranslation(s"skill.${skill.getSkill.getId.getNamespace}.${skill.getSkill.getId.getPath}"),
+        new TextComponentTranslation("status.skillful.clueless")
+      ).setStyle(new Style().setColor(TextFormatting.DARK_GRAY))
+      case s if (s.isCompleted) => new TextComponentTranslation("info.skillful.skillinfo.cmd.format",
+        new TextComponentTranslation(s"skill.${skill.getSkill.getId.getNamespace}.${skill.getSkill.getId.getPath}"),
+        new TextComponentTranslation("status.skillful.max")
+      ).setStyle(new Style().setColor(TextFormatting.GREEN))
       case _ => getSkillDesc(skill, 0)
     }
   }
