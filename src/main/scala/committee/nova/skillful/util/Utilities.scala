@@ -12,6 +12,7 @@ import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.text._
+import net.minecraftforge.common.util.FakePlayer
 
 object Utilities {
   def getPlayerSkills(player: EntityPlayer): ISkills = player.getCapability(Skillful.skillfulCap, null)
@@ -36,6 +37,7 @@ object Utilities {
 
   def sendSkillInfo(player: EntityPlayer, instance: SkillInstance, change: Int): Unit = {
     player match {
+      case _: FakePlayer =>
       case p: EntityPlayerMP =>
         val info = getPlayerSkillInfo(p, instance.getSkill.getId)
         info.setPercent(instance.getCurrentXp * 1F / instance.getSkill.getLevelRequiredXp(instance.getCurrentLevel))
@@ -47,6 +49,7 @@ object Utilities {
 
   def clearSkillInfoCache(player: EntityPlayer): Unit = {
     player match {
+      case _: FakePlayer =>
       case p: EntityPlayerMP => {
         val infos = getPlayerSkills(p).getSkillInfos
         infos.foreach(i => i.removePlayer(p))
@@ -59,6 +62,7 @@ object Utilities {
 
   def applySkillAttrs(player: EntityPlayer): Unit = {
     player match {
+      case _: FakePlayer =>
       case p: EntityPlayerMP => getPlayerSkills(p).getSkills.foreach(i => i.getSkill match {
         case l if (l.shouldCheckOnLogin) => l.checkOnLogin(p, i)
         case _ =>
@@ -68,6 +72,7 @@ object Utilities {
   }
 
   def syncSkills(player: EntityPlayerMP): Unit = {
+    if (isPlayerFake(player)) return
     if (!player.hasCapability(skillfulCap, null)) return
     val msg = new SkillsSyncMessage
     msg.getTag.setTag("skills", skillfulCap.getStorage.writeNBT(skillfulCap, player.getCapability(skillfulCap, null), null))
@@ -97,4 +102,6 @@ object Utilities {
   }
 
   def getPlayer(server: MinecraftServer, name: String): Option[EntityPlayerMP] = Option(server.getPlayerList.getPlayerByUsername(name))
+
+  def isPlayerFake(player: EntityPlayer): Boolean = player.isInstanceOf[FakePlayer]
 }

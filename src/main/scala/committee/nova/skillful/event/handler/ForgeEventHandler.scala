@@ -14,6 +14,7 @@ import net.minecraft.network.play.server.SPacketSoundEffect
 import net.minecraft.util.text.{Style, TextComponentTranslation, TextFormatting}
 import net.minecraft.util.{ResourceLocation, SoundCategory}
 import net.minecraftforge.common.MinecraftForge
+import net.minecraftforge.common.util.FakePlayer
 import net.minecraftforge.event.AttachCapabilitiesEvent
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent
 import net.minecraftforge.event.entity.player.PlayerEvent.Clone
@@ -30,6 +31,7 @@ class ForgeEventHandler {
   @SubscribeEvent
   def onClone(event: Clone): Unit = {
     val oldPlayer = event.getOriginal
+    if (oldPlayer.isFake) return
     val newPlayer = event.getEntityPlayer
     val cap = skillfulCap
     val storage = skillfulCap.getStorage
@@ -46,11 +48,12 @@ class ForgeEventHandler {
   }
 
   @SubscribeEvent
-  def onXpChanged(event: SkillXpEvent.Post): Unit = event.getPlayer.sendSkillInfo(event.getSkillInstance, event.getAmount)
+  def onXpChanged(event: SkillXpEvent.Post): Unit = if (!event.getPlayer.isFake) event.getPlayer.sendSkillInfo(event.getSkillInstance, event.getAmount)
 
   @SubscribeEvent
   def onLevelChanged(event: SkillLevelEvent): Unit = {
     val player = event.getPlayer
+    if (player.isFake) return
     val isUp = event.isUp
     event.getSkillInstance.getSkill match {
       case c if (c.shouldActOnLevelChange) => c.actOnLevelChange(player, event.getSkillInstance, isUp)
@@ -62,8 +65,10 @@ class ForgeEventHandler {
   @SubscribeEvent
   def onWakeUp(event: PlayerWakeUpEvent): Unit = {
     if (!(event.shouldSetSpawn() && !event.updateWorld() && !event.wakeImmediately())) return
+    val player = event.getEntityPlayer
+    if (player.isFake) return
     val buffer = new mutable.ArrayBuffer[(ResourceLocation, Int)]
-    event.getEntityPlayer match {
+    player match {
       case p: EntityPlayerMP =>
         p.getSkills.getSkills.foreach(i => {
           i.getSkill match {
@@ -92,7 +97,7 @@ class ForgeEventHandler {
 
   @SubscribeEvent
   def onFoodEaten(e: LivingEntityUseItemEvent.Finish): Unit = {
-    if (!e.getEntityLiving.isInstanceOf[EntityPlayerMP]) return
+    if (!e.getEntityLiving.isInstanceOf[EntityPlayerMP] || e.getEntityLiving.isInstanceOf[FakePlayer]) return
     val stack = e.getItem
     stack.getItem match {
       case _: ItemFood => SkillfulStorage.applyFoodEffect(e.getEntityLiving.asInstanceOf[EntityPlayerMP], stack)

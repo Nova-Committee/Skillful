@@ -63,16 +63,18 @@ object SkillfulCommand {
         return
       }
       Utilities.getPlayer(server, args(0)) match {
-        case Some(x) => args.length match {
-          case 1 => sender.sendMessage(new TextComponentString(s"${x.getName}:"))
-            SkillfulStorage.getSkills.foreach(s => sender.sendMessage(Utilities.getSkillDescForCmd(x.getSkillStat(s))))
-          case 2 => SkillfulStorage.getSkillStrictly(Try(new ResourceLocation(args(1))).getOrElse(new ResourceLocation("invalidInvalid"))) match {
-            case Some(z) => sender.sendMessage(Utilities.getSkillDescForCmd(x.getSkillStat(z)))
-            case None => sender.sendMessage(new TextComponentTranslation("msg.skillful.skill.notFound")
-              .setStyle(new Style().setColor(TextFormatting.DARK_RED)))
+        case Some(x) =>
+          if (x.isFake) return
+          args.length match {
+            case 1 => sender.sendMessage(new TextComponentString(s"${x.getName}:"))
+              SkillfulStorage.getSkills.foreach(s => sender.sendMessage(Utilities.getSkillDescForCmd(x.getSkillStat(s))))
+            case 2 => SkillfulStorage.getSkillStrictly(Try(new ResourceLocation(args(1))).getOrElse(new ResourceLocation("invalidInvalid"))) match {
+              case Some(z) => sender.sendMessage(Utilities.getSkillDescForCmd(x.getSkillStat(z)))
+              case None => sender.sendMessage(new TextComponentTranslation("msg.skillful.skill.notFound")
+                .setStyle(new Style().setColor(TextFormatting.DARK_RED)))
+            }
+            case _ => sender.sendMessage(new TextComponentString(getUsage(sender)))
           }
-          case _ => sender.sendMessage(new TextComponentString(getUsage(sender)))
-        }
         case None => sender.sendMessage(new TextComponentTranslation("msg.skillful.player.notFound"))
       }
     }

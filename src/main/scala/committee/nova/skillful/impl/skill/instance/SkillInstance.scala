@@ -27,12 +27,14 @@ class SkillInstance(val skill: ISkill) extends INBTSerializable[NBTTagCompound] 
   def isCompleted: Boolean = getCurrentLevel >= getSkill.getMaxLevel
 
   def addXp(player: EntityPlayerMP, xp: Int): Unit = {
+    if (player.isFake) return
     val event = new SkillXpEvent.Pre(player, this, xp)
     if (MinecraftForge.EVENT_BUS.post(event)) return
     _addXp(player, event.getAmount)
   }
 
   protected def _addXp(player: EntityPlayerMP, xp: Int): Unit = {
+    if (player.isFake) return
     if (xp == 0) return
     if (xp < 0) {
       _reduceXp(player, -xp)
@@ -51,12 +53,14 @@ class SkillInstance(val skill: ISkill) extends INBTSerializable[NBTTagCompound] 
   }
 
   def reduceXp(player: EntityPlayerMP, xp: Int): Unit = {
+    if (player.isFake) return
     val event = new SkillXpEvent.Pre(player, this, -xp)
     if (MinecraftForge.EVENT_BUS.post(event)) return
     _reduceXp(player, -event.getAmount)
   }
 
   protected def _reduceXp(player: EntityPlayerMP, xp: Int): Unit = {
+    if (player.isFake) return
     if (xp == 0) return
     if (xp < 0) {
       _addXp(player, -xp)
@@ -79,6 +83,7 @@ class SkillInstance(val skill: ISkill) extends INBTSerializable[NBTTagCompound] 
   def cheat(player: EntityPlayerMP): Unit = addXp(player, Int.MaxValue)
 
   def changeLevel(player: EntityPlayerMP, lvl: Int): Unit = {
+    if (player.isFake) return
     val real = MathHelper.clamp(lvl, 0, skill.getMaxLevel)
     val old = getCurrentLevel
     currentLevel = real

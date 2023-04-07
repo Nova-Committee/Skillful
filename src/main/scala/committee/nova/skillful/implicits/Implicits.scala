@@ -40,5 +40,7 @@ object Implicits {
       case p: EntityPlayerMP => Utilities.syncSkills(p)
       case _ =>
     }
+
+    def isFake: Boolean = Utilities.isPlayerFake(player)
   }
 }
