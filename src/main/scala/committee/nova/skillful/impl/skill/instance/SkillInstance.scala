@@ -33,7 +33,7 @@ class SkillInstance(val skill: ISkill) extends INBTSerializable[NBTTagCompound] 
     _addXp(player, event.getAmount)
   }
 
-  protected def _addXp(player: EntityPlayerMP, xp: Int): Unit = {
+  private def _addXp(player: EntityPlayerMP, xp: Int): Unit = {
     if (player.isFake) return
     if (xp == 0) return
     if (xp < 0) {
@@ -41,7 +41,7 @@ class SkillInstance(val skill: ISkill) extends INBTSerializable[NBTTagCompound] 
       return
     }
     if (isCompleted) return
-    currentXp += xp
+    currentXp += xp max (Int.MaxValue - currentXp)
     while (currentXp >= skill.getLevelRequiredXp(currentLevel)) {
       currentXp -= skill.getLevelRequiredXp(currentLevel)
       currentLevel += 1
@@ -59,7 +59,7 @@ class SkillInstance(val skill: ISkill) extends INBTSerializable[NBTTagCompound] 
     _reduceXp(player, -event.getAmount)
   }
 
-  protected def _reduceXp(player: EntityPlayerMP, xp: Int): Unit = {
+  private def _reduceXp(player: EntityPlayerMP, xp: Int): Unit = {
     if (player.isFake) return
     if (xp == 0) return
     if (xp < 0) {
