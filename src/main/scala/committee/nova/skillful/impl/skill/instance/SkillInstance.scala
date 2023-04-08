@@ -41,7 +41,7 @@ class SkillInstance(val skill: ISkill) extends INBTSerializable[NBTTagCompound] 
       return
     }
     if (isCompleted) return
-    currentXp += xp max (Int.MaxValue - currentXp)
+    currentXp += xp min (Int.MaxValue - currentXp)
     while (currentXp >= skill.getLevelRequiredXp(currentLevel)) {
       currentXp -= skill.getLevelRequiredXp(currentLevel)
       currentLevel += 1
