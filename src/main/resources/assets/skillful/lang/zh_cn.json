@@ -1,0 +1,13 @@
+{
+  "info.skillful.skillinfo.format": "%1$s 等级 %2$s ： %3$s / %4$s%5$s",
+  "info.skillful.skillinfo.cmd.format": "%1$s %2$s",
+  "info.skillful.wakeup.summary": "睡了甜美的一觉后，你的技能发生了如下变化：",
+  "info.skillful.wakeup.increase": "%1$s的经验上涨%2$s点",
+  "info.skillful.wakeup.decrease": "%1$s的经验下降%2$s点",
+  "status.skillful.clueless": "未学习",
+  "status.skillful.max": "满级",
+  "msg.skillful.skill.notFound": "未找到指定技能！",
+  "msg.skillful.player.notFound": "未找到指定玩家！",
+  "msg.skillful.info.cache.clear": "技能信息缓存已清除！",
+  "msg.skillful.change.applied": "更改已应用！"
+}

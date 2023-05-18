@@ -1,0 +1,12 @@
+modLoader = "scorge"
+loaderVersion = "[3,)"
+license = "GPL-3.0-only"
+[[mods]]
+modId = "skillful"
+entryClass = "committee.nova.skillful.Skillful"
+version = "${file.jarVersion}"
+displayName = "Skillful"
+authors = "Tapio"
+description = '''
+
+'''

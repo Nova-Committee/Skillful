@@ -1,0 +1,18 @@
+package committee.nova.skillful.event.impl
+
+import committee.nova.skillful.impl.skill.instance.SkillInstance
+import net.minecraft.entity.player.ServerPlayerEntity
+
+object SkillXpEvent {
+  class Pre(private val player: ServerPlayerEntity, private val skill: SkillInstance, private var amount: Int) extends SkillXpEvent(player, skill, amount) {
+    def setAmount(newAmount: Int): Unit = amount = newAmount
+
+    override def isCancelable: Boolean = true
+  }
+
+  class Post(private val player: ServerPlayerEntity, private val skill: SkillInstance, private var amount: Int) extends SkillXpEvent(player, skill, amount)
+}
+
+class SkillXpEvent(private val player: ServerPlayerEntity, private val skill: SkillInstance, private var amount: Int) extends SkillEvent(player, skill) {
+  def getAmount: Int = amount
+}
