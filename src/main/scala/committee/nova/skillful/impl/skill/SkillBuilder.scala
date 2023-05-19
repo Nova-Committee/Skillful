@@ -7,7 +7,7 @@ import net.minecraft.util.ResourceLocation
 import net.minecraft.world.BossInfo
 import org.apache.logging.log4j.util.BiConsumer
 
-import java.util.function.BiFunction
+import java.util.function.{BiFunction, IntFunction}
 
 object SkillBuilder {
   /**
@@ -37,6 +37,8 @@ class SkillBuilder(val id: ResourceLocation) {
     this.required = required
     this
   }
+
+  def setLevelRequiredXP(required: IntFunction[java.lang.Integer]): SkillBuilder = setLevelRequiredXP(i => required.apply(i))
 
   def setColor(color: BossInfo.Color): SkillBuilder = {
     this.color = color
