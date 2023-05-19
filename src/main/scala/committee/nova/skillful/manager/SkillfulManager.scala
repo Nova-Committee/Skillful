@@ -1,4 +1,4 @@
-package committee.nova.skillful.storage
+package committee.nova.skillful.manager
 
 import committee.nova.skillful.Constants
 import committee.nova.skillful.api.related.ISkillRelatedFood
@@ -11,7 +11,7 @@ import net.minecraft.world.BossInfo
 
 import scala.collection.mutable
 
-object SkillfulStorage {
+object SkillfulManager {
   private var afterInit = false
   private val skills: mutable.LinkedHashSet[ISkill] = new mutable.LinkedHashSet[ISkill]()
   private val foods: mutable.HashSet[ISkillRelatedFood] = new mutable.HashSet[ISkillRelatedFood]()
@@ -58,13 +58,27 @@ object SkillfulStorage {
   def addSkill(skill: ISkill): Boolean = {
     val logger = Constants.LOGGER
     val skillName = s"skill with id ${skill.getId.toString}"
-    if (afterInit) logger.warn(s"$skillName registration is out of preInit lifecycle!")
+    if (afterInit) {
+      logger.error(s"$skillName registration is after initialization, cancelling...")
+      return false
+    }
     val success = skills.add(skill)
     if (success) logger.info(s"Registered $skillName!") else logger.error(s"Failed to register duplicate $skillName!")
     success
   }
 
-  def addFood(food: ISkillRelatedFood): Unit = foods.add(food)
+  def addFood(food: ISkillRelatedFood): Boolean = {
+    val logger = Constants.LOGGER
+    val foodName = s"skill-related food ${food.getItemFood.getRegistryName.toString}"
+    if (afterInit) {
+      logger.error(s"$foodName registration is out of preInit lifecycle, cancelling...")
+      return false
+    }
+    val success = foods.add(food)
+    if (success) logger.info(s"Registered skill-related food $foodName!")
+    else logger.error(s"Failed to register duplicate skill-related food $foodName!")
+    success
+  }
 
   def setAfterInit(): Unit = afterInit = true
 }

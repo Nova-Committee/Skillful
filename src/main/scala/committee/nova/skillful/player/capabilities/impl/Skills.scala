@@ -1,23 +1,27 @@
 package committee.nova.skillful.player.capabilities.impl
 
 import committee.nova.skillful.api.skill.ISkill
-import committee.nova.skillful.event.handler.CapabilityHandler.skillfulCap
 import committee.nova.skillful.impl.skill.instance.SkillInstance
 import committee.nova.skillful.implicits.Implicits.PlayerEntityImplicit
+import committee.nova.skillful.manager.SkillfulManager
 import committee.nova.skillful.player.capabilities.api.ISkills
 import committee.nova.skillful.player.capabilities.info.SkillInfo
-import committee.nova.skillful.storage.SkillfulStorage
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.nbt.{CompoundNBT, INBT, ListNBT}
 import net.minecraft.util.{Direction, ResourceLocation}
 import net.minecraftforge.common.capabilities.Capability.IStorage
-import net.minecraftforge.common.capabilities.{Capability, ICapabilityProvider, ICapabilitySerializable}
+import net.minecraftforge.common.capabilities.{Capability, CapabilityInject, ICapabilityProvider, ICapabilitySerializable}
 import net.minecraftforge.common.util.{LazyOptional, NonNullSupplier}
 
 import scala.collection.mutable
 import scala.jdk.CollectionConverters._
 
 object Skills {
+  @CapabilityInject(classOf[ISkills])
+  def setCap(cap: Capability[ISkills]): Unit = skillfulCap = cap
+
+  var skillfulCap: Capability[ISkills] = _
+
   class Provider extends ICapabilityProvider with ICapabilitySerializable[CompoundNBT] {
     private val instance = new Impl
 
@@ -51,7 +55,7 @@ object Skills {
           skills.clear()
           tag.asScala.foreach {
             case t: CompoundNBT =>
-              val skill = SkillfulStorage.getSkill(new ResourceLocation(t.getString("skill")))
+              val skill = SkillfulManager.getSkill(new ResourceLocation(t.getString("skill")))
               val i = new SkillInstance(skill)
               i.deserializeNBT(t)
               skills.add(i)

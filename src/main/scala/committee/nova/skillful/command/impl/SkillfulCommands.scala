@@ -5,9 +5,9 @@ import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.context.CommandContext
 import committee.nova.skillful.api.skill.ISkill
 import committee.nova.skillful.implicits.Implicits.PlayerEntityImplicit
+import committee.nova.skillful.manager.SkillfulManager
 import committee.nova.skillful.network.handler.NetworkHandler
 import committee.nova.skillful.network.message.InfoClearMessage
-import committee.nova.skillful.storage.SkillfulStorage
 import committee.nova.skillful.util.Utilities
 import net.minecraft.command.CommandSource
 import net.minecraft.command.arguments.EntityArgument
@@ -21,7 +21,7 @@ object SkillfulCommands {
       val src = context.getSource
       src.getEntity match {
         case p: ServerPlayerEntity => {
-          val skills = SkillfulStorage.getSkills
+          val skills = SkillfulManager.getSkills
           if (skills.isEmpty) return 1
           src.sendFeedback(new StringTextComponent(s"${p.getName.getString}:"), false)
           skills.foreach(s => src.sendFeedback(Utilities.getSkillDescForCmd(p.getSkillStat(s)), false))
@@ -53,7 +53,7 @@ object SkillfulCommands {
   class ShowArg1 extends Command[CommandSource] {
     override def run(context: CommandContext[CommandSource]): Int = {
       val src = context.getSource
-      val skills = SkillfulStorage.getSkills
+      val skills = SkillfulManager.getSkills
       if (skills.isEmpty) return 1
       val target = EntityArgument.getPlayer(context, "target")
       src.sendFeedback(new StringTextComponent(s"${target.getName.getString}:"), false)

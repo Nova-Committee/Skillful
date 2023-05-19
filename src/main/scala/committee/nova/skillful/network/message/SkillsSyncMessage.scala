@@ -1,6 +1,6 @@
 package committee.nova.skillful.network.message
 
-import committee.nova.skillful.event.handler.CapabilityHandler.skillfulCap
+import committee.nova.skillful.player.capabilities.impl.Skills.skillfulCap
 import net.minecraft.client.Minecraft
 import net.minecraft.nbt.CompoundNBT
 import net.minecraft.network.PacketBuffer

@@ -2,11 +2,11 @@ package committee.nova.skillful.event.handler
 
 import committee.nova.skillful.Constants
 import committee.nova.skillful.command.init.CommandInit
-import committee.nova.skillful.event.handler.CapabilityHandler.skillfulCap
 import committee.nova.skillful.event.impl.{SkillLevelEvent, SkillXpEvent}
 import committee.nova.skillful.implicits.Implicits.PlayerEntityImplicit
+import committee.nova.skillful.manager.SkillfulManager
 import committee.nova.skillful.player.capabilities.impl.Skills
-import committee.nova.skillful.storage.SkillfulStorage
+import committee.nova.skillful.player.capabilities.impl.Skills.skillfulCap
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.{PlayerEntity, ServerPlayerEntity}
 import net.minecraft.network.play.server.SPlaySoundEffectPacket
@@ -137,6 +137,6 @@ class ForgeEventHandler {
   def onFoodEaten(e: LivingEntityUseItemEvent.Finish): Unit = {
     if (!e.getEntityLiving.isInstanceOf[ServerPlayerEntity] || e.getEntityLiving.isInstanceOf[FakePlayer]) return
     val stack = e.getItem
-    SkillfulStorage.applyFoodEffect(e.getEntityLiving.asInstanceOf[ServerPlayerEntity], stack)
+    SkillfulManager.applyFoodEffect(e.getEntityLiving.asInstanceOf[ServerPlayerEntity], stack)
   }
 }

@@ -48,9 +48,10 @@ object CommandInit {
                   Commands.argument("skill_id", SkillArgument.skill)
                     .`then`(
                       Commands.argument("variation", IntegerArgumentType.integer(1))
+                        .requires(s => s.hasPermissionLevel(s.getServer.getOpPermissionLevel))
+                        .executes(new ChangeXp)
                     )
                     .requires(s => s.hasPermissionLevel(s.getServer.getOpPermissionLevel))
-                    .executes(new ChangeXp)
                 )
                 .requires(s => s.hasPermissionLevel(s.getServer.getOpPermissionLevel))
             )
