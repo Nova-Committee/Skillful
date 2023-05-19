@@ -38,7 +38,7 @@ class SkillBuilder(val id: ResourceLocation) {
     this
   }
 
-  def setLevelRequiredXP(required: IntFunction[java.lang.Integer]): SkillBuilder = setLevelRequiredXP(i => required.apply(i))
+  def setLevelRequiredXP$J(required: IntFunction[java.lang.Integer]): SkillBuilder = setLevelRequiredXP(i => required.apply(i))
 
   def setColor(color: BossInfo.Color): SkillBuilder = {
     this.color = color
