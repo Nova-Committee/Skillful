@@ -10,6 +10,10 @@ import org.apache.logging.log4j.util.BiConsumer
 import java.util.function.BiFunction
 
 object SkillBuilder {
+  /**
+   * @param id The skill's identifier. Characters allowed: 0-9 a-z A-Z _
+   * @return A SkillBuilder instance.
+   */
   def create(id: ResourceLocation): SkillBuilder = new SkillBuilder(id)
 }
 

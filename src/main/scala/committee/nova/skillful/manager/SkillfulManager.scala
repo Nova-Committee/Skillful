@@ -57,9 +57,14 @@ object SkillfulManager {
 
   def addSkill(skill: ISkill): Boolean = {
     val logger = Constants.LOGGER
-    val skillName = s"skill with id ${skill.getId.toString}"
+    val name = skill.getId.toString
+    val skillName = s"skill with id $name}"
+    if (name.contains('.')) {
+      logger.error(s"$name contains \'.\', which is not allowed. Cancelling...")
+      return false
+    }
     if (afterInit) {
-      logger.error(s"$skillName registration is after initialization, cancelling...")
+      logger.error(s"$skillName registration is after initialization. Cancelling...")
       return false
     }
     val success = skills.add(skill)
@@ -71,7 +76,7 @@ object SkillfulManager {
     val logger = Constants.LOGGER
     val foodName = s"skill-related food ${food.getItemFood.getRegistryName.toString}"
     if (afterInit) {
-      logger.error(s"$foodName registration is out of preInit lifecycle, cancelling...")
+      logger.error(s"$foodName registration is after initialization. Cancelling...")
       return false
     }
     val success = foods.add(food)
