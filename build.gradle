@@ -5,7 +5,7 @@ plugins {
 }
 
 
-group = 'committee.nova'
+group = 'committee.nova.skillful.forge'
 version = '0.0.3.9'
 def mcVersion = "1.12.2"
 
@@ -140,6 +140,7 @@ task sourcesJar(type: Jar) {
 publishing {
     publications {
         mavenJava(MavenPublication) {
+            artifactId = 'skillful-1.12.2'
             from components.java
             artifact sourcesJar
         }

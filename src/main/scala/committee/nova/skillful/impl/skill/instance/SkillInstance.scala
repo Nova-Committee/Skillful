@@ -90,6 +90,7 @@ class SkillInstance(val skill: ISkill) extends INBTSerializable[NBTTagCompound] 
     currentXp = 0
     if (old == real) return
     MinecraftForge.EVENT_BUS.post(if (real > old) new SkillLevelEvent.Up(player, this, real) else new SkillLevelEvent.Down(player, this, real))
+    player.syncSkills()
   }
 
   private def makeClueless(): Unit = {
