@@ -96,8 +96,8 @@ class ForgeEventHandler {
       case _ =>
     }
     if (isUp && event.getSkillInstance.getCurrentLevel != 1)
-      player.connection.sendPacket(new SPlaySoundEffectPacket(SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS,
-        player.getPosX, player.getPosY, player.getPosZ, 1.0F, 1.0F))
+      player.connection.send(new SPlaySoundEffectPacket(SoundEvents.PLAYER_LEVELUP, SoundCategory.PLAYERS,
+        player.getX, player.getY, player.getZ, 1.0F, 1.0F))
   }
 
   @SubscribeEvent
@@ -120,13 +120,13 @@ class ForgeEventHandler {
           }
         })
         if (buffer.nonEmpty) {
-          p.sendMessage(new TranslationTextComponent("info.skillful.wakeup.summary").mergeStyle(TextFormatting.LIGHT_PURPLE), Util.DUMMY_UUID)
+          p.sendMessage(new TranslationTextComponent("info.skillful.wakeup.summary").withStyle(TextFormatting.LIGHT_PURPLE), Util.NIL_UUID)
           buffer.foreach(x => {
             val c = x._2
             p.sendMessage(new TranslationTextComponent(s"info.skillful.wakeup.${if (c > 0) "increase" else "decrease"}",
               new TranslationTextComponent(s"skill.${x._1.getNamespace}.${x._1.getPath}"),
               c.abs.toString
-            ).mergeStyle(if (c > 0) TextFormatting.GREEN else TextFormatting.RED), Util.DUMMY_UUID)
+            ).withStyle(if (c > 0) TextFormatting.GREEN else TextFormatting.RED), Util.NIL_UUID)
           })
         }
       case _ =>

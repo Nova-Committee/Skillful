@@ -12,8 +12,8 @@ trait IApplyAttributeModifiers extends IActOnLevelChange with ICheckOnLogin {
       val attr = m._1
       val modifier = m._2
       val pAttr = player.getAttribute(attr)
-      pAttr.removeModifier(modifier.getID)
-      pAttr.applyPersistentModifier(modifier)
+      pAttr.removeModifier(modifier.getId)
+      pAttr.addPermanentModifier(modifier)
     }
   }
 

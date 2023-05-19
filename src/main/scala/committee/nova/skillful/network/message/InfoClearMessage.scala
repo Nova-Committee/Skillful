@@ -7,7 +7,7 @@ import java.util.function.Supplier
 
 class InfoClearMessage {
   def handler(ctx: Supplier[NetworkEvent.Context]): Unit = {
-    ctx.get().enqueueWork(() => Minecraft.getInstance().ingameGUI.getBossOverlay.clearBossInfos())
+    ctx.get().enqueueWork(() => Minecraft.getInstance().gui.getBossOverlay.reset())
     ctx.get().setPacketHandled(true)
   }
 }

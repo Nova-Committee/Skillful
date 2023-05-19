@@ -15,11 +15,11 @@ class SkillsSyncMessage {
 
   def this(buffer: PacketBuffer) {
     this()
-    tag = buffer.readCompoundTag()
+    tag = buffer.readNbt()
   }
 
   def toBytes(buffer: PacketBuffer): Unit = {
-    buffer.writeCompoundTag(tag)
+    buffer.writeNbt(tag)
   }
 
   def handler(ctx: Supplier[NetworkEvent.Context]): Unit = {

@@ -24,16 +24,16 @@ object CommandInit {
         .`then`(
           Commands.literal("show")
             .`then`(
-              Commands.argument("target", EntityArgument.player())
+              Commands.argument("target", EntityArgument.player)
                 .`then`(
                   Commands.argument("skill_id", SkillArgument.skill)
-                    .requires(s => s.hasPermissionLevel(2))
+                    .requires(s => s.hasPermission(2))
                     .executes(new ShowArg2)
                 )
-                .requires(s => s.hasPermissionLevel(2))
+                .requires(s => s.hasPermission(2))
                 .executes(new ShowArg1)
             )
-            .requires(s => s.hasPermissionLevel(2))
+            .requires(s => s.hasPermission(2))
         )
         .`then`(
           Commands.literal("clearinfo")
@@ -43,19 +43,19 @@ object CommandInit {
         .`then`(
           Commands.literal("changexp")
             .`then`(
-              Commands.argument("target", EntityArgument.player())
+              Commands.argument("target", EntityArgument.player)
                 .`then`(
                   Commands.argument("skill_id", SkillArgument.skill)
                     .`then`(
-                      Commands.argument("variation", IntegerArgumentType.integer(1))
-                        .requires(s => s.hasPermissionLevel(s.getServer.getOpPermissionLevel))
+                      Commands.argument("variation", IntegerArgumentType.integer)
+                        .requires(s => s.hasPermission(s.getServer.getOperatorUserPermissionLevel))
                         .executes(new ChangeXp)
                     )
-                    .requires(s => s.hasPermissionLevel(s.getServer.getOpPermissionLevel))
+                    .requires(s => s.hasPermission(s.getServer.getOperatorUserPermissionLevel))
                 )
-                .requires(s => s.hasPermissionLevel(s.getServer.getOpPermissionLevel))
+                .requires(s => s.hasPermission(s.getServer.getOperatorUserPermissionLevel))
             )
-            .requires(s => s.hasPermissionLevel(s.getServer.getOpPermissionLevel))
+            .requires(s => s.hasPermission(s.getServer.getOperatorUserPermissionLevel))
         )
     )
   }

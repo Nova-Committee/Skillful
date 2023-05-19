@@ -12,7 +12,7 @@ import committee.nova.skillful.util.Utilities
 import net.minecraft.command.CommandSource
 import net.minecraft.command.arguments.EntityArgument
 import net.minecraft.entity.player.ServerPlayerEntity
-import net.minecraft.util.text.{StringTextComponent, TranslationTextComponent}
+import net.minecraft.util.text.{StringTextComponent, TextFormatting, TranslationTextComponent}
 import net.minecraftforge.fml.network.PacketDistributor
 
 object SkillfulCommands {
@@ -23,8 +23,8 @@ object SkillfulCommands {
         case p: ServerPlayerEntity => {
           val skills = SkillfulManager.getSkills
           if (skills.isEmpty) return 1
-          src.sendFeedback(new StringTextComponent(s"${p.getName.getString}:"), false)
-          skills.foreach(s => src.sendFeedback(Utilities.getSkillDescForCmd(p.getSkillStat(s)), false))
+          src.sendSuccess(new StringTextComponent(s"${p.getName.getString}:"), false)
+          skills.foreach(s => src.sendSuccess(Utilities.getSkillDescForCmd(p.getSkillStat(s)), false))
           1
         }
         case _ => 0
@@ -39,11 +39,11 @@ object SkillfulCommands {
         case p: ServerPlayerEntity =>
           val skill = context.getArgument("skill_id", classOf[ISkill])
           if (skill.isDummy) {
-            src.sendFeedback(new TranslationTextComponent("msg.skillful.skill.notFound"), false)
+            src.sendFailure(new TranslationTextComponent("msg.skillful.skill.notFound"))
             return 0
           }
-          src.sendFeedback(new StringTextComponent(s"${p.getName.getString}:"), false)
-          src.sendFeedback(Utilities.getSkillDescForCmd(p.getSkillStat(skill)), false)
+          src.sendSuccess(new StringTextComponent(s"${p.getName.getString}:"), false)
+          src.sendSuccess(Utilities.getSkillDescForCmd(p.getSkillStat(skill)), false)
           1
         case _ => 0
       }
@@ -56,8 +56,8 @@ object SkillfulCommands {
       val skills = SkillfulManager.getSkills
       if (skills.isEmpty) return 1
       val target = EntityArgument.getPlayer(context, "target")
-      src.sendFeedback(new StringTextComponent(s"${target.getName.getString}:"), false)
-      skills.foreach(s => src.sendFeedback(Utilities.getSkillDescForCmd(target.getSkillStat(s)), false))
+      src.sendSuccess(new StringTextComponent(s"${target.getName.getString}:"), false)
+      skills.foreach(s => src.sendSuccess(Utilities.getSkillDescForCmd(target.getSkillStat(s)), false))
       1
     }
   }
@@ -68,11 +68,11 @@ object SkillfulCommands {
       val target = EntityArgument.getPlayer(context, "target")
       val skill = context.getArgument("skill_id", classOf[ISkill])
       if (skill.isDummy) {
-        src.sendFeedback(new TranslationTextComponent("msg.skillful.skill.notFound"), false)
+        src.sendFailure(new TranslationTextComponent("msg.skillful.skill.notFound"))
         return 0
       }
-      src.sendFeedback(new StringTextComponent(s"${target.getName.getString}:"), false)
-      src.sendFeedback(Utilities.getSkillDescForCmd(target.getSkillStat(skill)), false)
+      src.sendSuccess(new StringTextComponent(s"${target.getName.getString}:"), false)
+      src.sendSuccess(Utilities.getSkillDescForCmd(target.getSkillStat(skill)), false)
       1
     }
   }
@@ -84,7 +84,7 @@ object SkillfulCommands {
         case p: ServerPlayerEntity => {
           p.clearSkillInfoCache()
           NetworkHandler.instance.send(PacketDistributor.PLAYER.`with`(() => p), new InfoClearMessage)
-          src.sendFeedback(new TranslationTextComponent("msg.skillful.info.cache.clear"), false)
+          src.sendSuccess(new TranslationTextComponent("msg.skillful.info.cache.clear").withStyle(TextFormatting.YELLOW), false)
           1
         }
         case _ => 0
@@ -98,13 +98,13 @@ object SkillfulCommands {
       val target = EntityArgument.getPlayer(context, "target")
       val skill = context.getArgument("skill_id", classOf[ISkill])
       if (skill.isDummy) {
-        src.sendFeedback(new TranslationTextComponent("msg.skillful.skill.notFound"), false)
+        src.sendFailure(new TranslationTextComponent("msg.skillful.skill.notFound"))
         return 0
       }
       val v = IntegerArgumentType.getInteger(context, "variation")
       val stat = target.getSkillStat(skill)
       stat.addXp(target, v)
-      src.sendFeedback(Utilities.getSkillDescForCmd(stat), false)
+      src.sendSuccess(Utilities.getSkillDescForCmd(stat), false)
       1
     }
   }
