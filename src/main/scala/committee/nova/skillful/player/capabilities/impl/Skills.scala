@@ -37,8 +37,7 @@ object Skills {
 
     override def getCapability[T](cap: Capability[T], side: Direction): LazyOptional[T] = if (cap == skillfulCap) LazyOptional.of(new NonNullSupplier[ISkills] {
       override def get(): ISkills = instance
-    }.asInstanceOf[NonNullSupplier[T]]) else null
-
+    }.asInstanceOf[NonNullSupplier[T]]) else LazyOptional.empty()
   }
 
   class Storage extends IStorage[ISkills] {
