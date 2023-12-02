@@ -21,4 +21,5 @@ public interface ISkills extends INBTSerializable<ListTag> {
 
     Optional<DummySkillInstance> getUnregisteredSkill(ResourceLocation id);
 
+    void removeUnregisteredSkill(ResourceLocation id);
 }

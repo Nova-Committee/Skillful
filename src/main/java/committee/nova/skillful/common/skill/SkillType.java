@@ -12,17 +12,17 @@ public class SkillType implements ISkillType {
     @Nullable
     private final LevelChange onLevelChange;
     @Nullable
-    private final SkillType.SimpleSkillCheck onCheck;
+    private final SkillType.SkillCheck onCheck;
     @Nullable
-    private final SkillType.SimpleSkillCheck onWakeup;
+    private final SkillType.Wakeup onWakeup;
 
     private SkillType(
             ResourceLocation id,
             int maxLevel,
             LevelRequiredXp levelRequiredXp,
             @Nullable LevelChange onLevelChange,
-            @Nullable SkillType.SimpleSkillCheck onCheck,
-            @Nullable SkillType.SimpleSkillCheck onWakeup
+            @Nullable SkillType.SkillCheck onCheck,
+            @Nullable SkillType.Wakeup onWakeup
     ) {
         this.id = id;
         this.maxLevel = maxLevel;
@@ -50,6 +50,7 @@ public class SkillType implements ISkillType {
 
     @Override
     public void onLevelChange(Player player, SkillInstance instance, long oldLevel, long newLevel) {
+        onCheck(player, instance);
         if (onLevelChange != null) onLevelChange.run(player, instance, oldLevel, newLevel);
     }
 
@@ -68,8 +69,8 @@ public class SkillType implements ISkillType {
         private int maxLevel = 100;
         private LevelRequiredXp levelRequiredXp = (p, i) -> i * 200;
         private LevelChange onLevelChange = null;
-        private SimpleSkillCheck onCheck = null;
-        private SimpleSkillCheck onWakeup = null;
+        private SkillCheck onCheck = null;
+        private Wakeup onWakeup = null;
 
         private Builder(ResourceLocation id) {
             this.id = id;
@@ -95,12 +96,12 @@ public class SkillType implements ISkillType {
             return this;
         }
 
-        public Builder onLogin(SimpleSkillCheck onLogin) {
-            this.onCheck = onLogin;
+        public Builder onCheck(SkillCheck onCheck) {
+            this.onCheck = onCheck;
             return this;
         }
 
-        public Builder onWakeup(SimpleSkillCheck onWakeup) {
+        public Builder onWakeup(Wakeup onWakeup) {
             this.onWakeup = onWakeup;
             return this;
         }
@@ -121,7 +122,11 @@ public class SkillType implements ISkillType {
     }
 
     @FunctionalInterface
-    public interface SimpleSkillCheck {
+    public interface SkillCheck {
+        void check(Player player, SkillInstance instance);
+    }
+
+    public interface Wakeup {
         void check(Player player, SkillInstance instance);
     }
 }

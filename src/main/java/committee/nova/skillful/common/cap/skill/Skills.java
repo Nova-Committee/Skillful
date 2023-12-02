@@ -58,9 +58,14 @@ public class Skills {
         }
 
         @Override
+        public void removeUnregisteredSkill(ResourceLocation id) {
+            unregisteredSkills.remove(id);
+        }
+
+        @Override
         public ListTag serializeNBT() {
             final ListTag list = new ListTag();
-            skills.values().forEach(i -> list.add(i.serializeNBT()));
+            skills.values().stream().filter(s -> !s.clueless()).forEach(i -> list.add(i.serializeNBT()));
             unregisteredSkills.values().forEach(i -> list.add(i.serializeNBT()));
             return list;
         }

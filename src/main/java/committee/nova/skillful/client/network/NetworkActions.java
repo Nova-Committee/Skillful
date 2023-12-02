@@ -17,16 +17,19 @@ public class NetworkActions {
         if (player == null) return;
         if (!SkillTypeManager.hasSkillType(id)) return;
         player.getCapability(Skills.SKILLS_CAPABILITY)
-                .ifPresent(s -> SkillTypeManager.getSkillType(id)
-                        .ifPresent(t -> {
+                .ifPresent(s -> SkillTypeManager.getSkillType(id).ifPresent(t -> {
                             final SkillInstance instance = s.getOrCreateSkill(t);
-                            if (instance.getXp() != xp) {
-                                MinecraftForge.EVENT_BUS.post(new SkillXpEvent(player, instance, xp - instance.getXp()));
-                                instance.setXp(xp);
+                            final long level0 = instance.getLevel();
+                            final long xp0 = instance.getXp();
+                            long levelChange = 0;
+                            instance.setLevel(level);
+                            instance.setXp(xp);
+                            if (level0 != level) {
+                                levelChange = level - level0;
+                                MinecraftForge.EVENT_BUS.post(new SkillLevelEvent(player, instance, level0, level));
                             }
-                            if (instance.getLevel() != level) {
-                                MinecraftForge.EVENT_BUS.post(new SkillLevelEvent(player, instance, instance.getLevel(), level));
-                                instance.setLevel(level);
+                            if (xp0 != xp) {
+                                MinecraftForge.EVENT_BUS.post(new SkillXpEvent(player, instance, xp - xp0, levelChange));
                             }
                         })
                 );

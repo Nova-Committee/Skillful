@@ -3,7 +3,10 @@ package committee.nova.skillful.common.event.handler;
 import committee.nova.skillful.Skillful;
 import committee.nova.skillful.common.cap.skill.ISkills;
 import committee.nova.skillful.common.cap.skill.Skills;
+import committee.nova.skillful.common.command.CommandManager;
 import committee.nova.skillful.common.util.Utilities;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -12,6 +15,7 @@ import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -60,8 +64,15 @@ public class ForgeEventHandler {
     public static void onWakeup(PlayerWakeUpEvent event) {
         if (event.updateLevel() || event.wakeImmediately()) return;
         if (!(event.getEntity() instanceof ServerPlayer p) || p instanceof FakePlayer) return;
+        p.displayClientMessage(Component.translatable("msg.skillful.sleep")
+                .withStyle(ChatFormatting.AQUA), false);
         p.getCapability(Skills.SKILLS_CAPABILITY)
                 .ifPresent(i -> i.getSkills().forEach(s -> s.getSkill().onWakeup(p, s)));
+    }
+
+    @SubscribeEvent
+    public static void onRegisterCmd(RegisterCommandsEvent event) {
+        CommandManager.init(event.getDispatcher());
     }
 
     private static void checkAndSync(Player player) {

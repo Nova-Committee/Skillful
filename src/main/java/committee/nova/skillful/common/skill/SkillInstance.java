@@ -48,6 +48,7 @@ public class SkillInstance implements ISkillRecord {
         if (level0 == level) return;
         xp = 0;
         MinecraftForge.EVENT_BUS.post(new SkillLevelEvent(player, this, level0, level));
+        skill.onLevelChange(player, this, level0, level);
         syncToClient(player);
     }
 
@@ -70,7 +71,10 @@ public class SkillInstance implements ISkillRecord {
             }
             xp -= required;
         }
-        if (level0 != level) MinecraftForge.EVENT_BUS.post(new SkillLevelEvent(player, this, level0, level));
+        if (level0 != level) {
+            skill.onLevelChange(player, this, level0, level);
+            MinecraftForge.EVENT_BUS.post(new SkillLevelEvent(player, this, level0, level));
+        }
         syncToClient(player);
     }
 
@@ -91,7 +95,10 @@ public class SkillInstance implements ISkillRecord {
             }
             xp += skill.getLevelRequiredXp(player, level);
         }
-        if (level0 != level) MinecraftForge.EVENT_BUS.post(new SkillLevelEvent(player, this, level0, level));
+        if (level0 != level) {
+            skill.onLevelChange(player, this, level0, level);
+            MinecraftForge.EVENT_BUS.post(new SkillLevelEvent(player, this, level0, level));
+        }
         syncToClient(player);
     }
 

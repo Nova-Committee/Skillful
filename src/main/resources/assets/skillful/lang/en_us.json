@@ -1,5 +1,18 @@
 {
-  "toast.skillful.lvlup.desc": "%s: Level %s",
+  "cmd.skillful.skill.clueless": "You haven't learn the skill \"%s\" yet!",
+  "cmd.skillful.skill.empty": "You haven't learn any skill yet!",
+  "cmd.skillful.skill.list": "%s's skills:",
+  "cmd.skillful.skill.not_found": "Failed to find the skill.",
+  "msg.skillful.level.up": "Level Up!",
+  "msg.skillful.level.down": "Level Down...",
+  "msg.skillful.level.xp": "%1$s: Level %2$s >> %3$s / %4$s",
+  "msg.skillful.level.clueless": "%s: Clueless",
+  "msg.skillful.level.mastered": "%s: Mastered",
+  "msg.skillful.sleep": "After a sweet sleep, you feel refreshed.",
+  "msg.skillful.xp.change": "%1$s Level %2$s: %3$s / %4$s << %5$s",
+  "toast.skillful.lvlup.desc": "%s: %s",
+  "toast.skillful.lvlup.level": "Level %s",
+  "toast.skillful.lvlup.mastered": "Mastered",
   "toast.skillful.lvlup.title": "Level up!",
   "type.skillful.skillful.test": "Test Skill"
 }
