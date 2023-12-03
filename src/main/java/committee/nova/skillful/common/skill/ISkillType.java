@@ -1,6 +1,7 @@
 package committee.nova.skillful.common.skill;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 
@@ -18,6 +19,6 @@ public interface ISkillType {
     void onWakeup(Player player, SkillInstance instance);
 
     default Component getName() {
-        return Component.translatable("type.skillful." + getId().toString().replace(':', '.'));
+        return new TranslatableComponent("type.skillful." + getId().toString().replace(':', '.'));
     }
 }

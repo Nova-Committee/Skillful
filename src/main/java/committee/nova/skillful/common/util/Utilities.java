@@ -6,6 +6,7 @@ import committee.nova.skillful.common.network.msg.SyncSkillsMsg;
 import committee.nova.skillful.common.skill.SkillInstance;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.util.FakePlayer;
@@ -34,10 +35,10 @@ public class Utilities {
         final List<Component> list = new ArrayList<>();
         player.getCapability(Skills.SKILLS_CAPABILITY).ifPresent(s -> {
             if (s.getSkills().isEmpty()) {
-                list.add(Component.translatable("cmd.skillful.skill.empty").withStyle(ChatFormatting.GRAY));
+                list.add(new TranslatableComponent("cmd.skillful.skill.empty").withStyle(ChatFormatting.GRAY));
                 return;
             }
-            list.add(Component.translatable("cmd.skillful.skill.list", player.getName()).withStyle(ChatFormatting.YELLOW));
+            list.add(new TranslatableComponent("cmd.skillful.skill.list", player.getName()).withStyle(ChatFormatting.YELLOW));
             list.addAll(s.getSkills().stream().map(i -> getSkillInfo4Cmd(player, i)).toList());
         });
         return list;
@@ -45,11 +46,11 @@ public class Utilities {
 
     public static Component getSkillInfo4Cmd(Player player, SkillInstance i) {
         final Component name = i.getSkill().getName();
-        if (i.clueless()) return Component.translatable("msg.skillful.level.clueless", name)
+        if (i.clueless()) return new TranslatableComponent("msg.skillful.level.clueless", name)
                 .withStyle(ChatFormatting.GRAY);
-        if (i.mastered()) return Component.translatable("msg.skillful.level.mastered", name)
+        if (i.mastered()) return new TranslatableComponent("msg.skillful.level.mastered", name)
                 .withStyle(ChatFormatting.GOLD);
-        return Component.translatable(
+        return new TranslatableComponent(
                 "msg.skillful.level.xp",
                 name,
                 i.getLevel(),

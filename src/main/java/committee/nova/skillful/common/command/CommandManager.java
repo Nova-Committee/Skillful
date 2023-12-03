@@ -14,16 +14,26 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.commands.synchronization.ArgumentTypeInfos;
-import net.minecraft.commands.synchronization.SingletonArgumentInfo;
-import net.minecraft.network.chat.Component;
+import net.minecraft.commands.synchronization.ArgumentTypes;
+import net.minecraft.commands.synchronization.EmptyArgumentSerializer;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Optional;
 import java.util.function.Predicate;
 
 public class CommandManager {
-    private static final Predicate<CommandSourceStack> isOp = s -> s.isPlayer() && s.hasPermission(s.getServer().getOperatorUserPermissionLevel());
+    private static final Predicate<CommandSourceStack> isPlayer = s -> {
+        try {
+            s.getPlayerOrException();
+            return true;
+        } catch (CommandSyntaxException ignored) {
+
+        }
+        return false;
+    };
+    private static final Predicate<CommandSourceStack> isOp = isPlayer
+            .and(s -> s.hasPermission(s.getServer().getOperatorUserPermissionLevel()));
 
     private static int list(CommandContext<CommandSourceStack> ctx, ServerPlayer target) throws CommandSyntaxException {
         final ServerPlayer player = ctx.getSource().getPlayerOrException();
@@ -34,16 +44,17 @@ public class CommandManager {
     private static int query(CommandContext<CommandSourceStack> ctx, ServerPlayer target) {
         final ISkillType skill = SkillArgumentType.getSkill(ctx, "skill_id");
         if (skill == null) {
-            ctx.getSource().sendFailure(Component.translatable("cmd.skillful.skill.not_found"));
+            ctx.getSource().sendFailure(new TranslatableComponent("cmd.skillful.skill.not_found"));
             return 0;
         }
         target.getCapability(Skills.SKILLS_CAPABILITY).ifPresent(i -> {
             final Optional<SkillInstance> instance = i.getSkill(skill);
-            ctx.getSource().sendSystemMessage(Component.translatable("cmd.skillful.skill.list", target.getName())
-                    .withStyle(ChatFormatting.YELLOW));
-            ctx.getSource().sendSystemMessage(instance
+            ctx.getSource().sendSuccess(new TranslatableComponent("cmd.skillful.skill.list", target.getName())
+                    .withStyle(ChatFormatting.YELLOW), false);
+            ctx.getSource().sendSuccess(instance
                     .map(skillInstance -> Utilities.getSkillInfo4Cmd(target, skillInstance))
-                    .orElseGet(() -> Component.translatable("cmd.skillful.skill.clueless", skill.getName())));
+                            .orElseGet(() -> new TranslatableComponent("cmd.skillful.skill.clueless", skill.getName())),
+                    false);
         });
         return 1;
     }
@@ -51,15 +62,15 @@ public class CommandManager {
     private static int changeXp(CommandContext<CommandSourceStack> ctx, ServerPlayer target) {
         final ISkillType skill = SkillArgumentType.getSkill(ctx, "skill_id");
         if (skill == null) {
-            ctx.getSource().sendFailure(Component.translatable("cmd.skillful.skill.not_found"));
+            ctx.getSource().sendFailure(new TranslatableComponent("cmd.skillful.skill.not_found"));
             return 0;
         }
         target.getCapability(Skills.SKILLS_CAPABILITY).ifPresent(i -> {
             final SkillInstance instance = i.getOrCreateSkill(skill);
             instance.changeXp(target, LongArgumentType.getLong(ctx, "change"));
-            ctx.getSource().sendSystemMessage(Component.translatable("cmd.skillful.skill.list", target.getName())
-                    .withStyle(ChatFormatting.YELLOW));
-            ctx.getSource().sendSystemMessage(Utilities.getSkillInfo4Cmd(target, instance));
+            ctx.getSource().sendSuccess(new TranslatableComponent("cmd.skillful.skill.list", target.getName())
+                    .withStyle(ChatFormatting.YELLOW), false);
+            ctx.getSource().sendSuccess(Utilities.getSkillInfo4Cmd(target, instance), false);
         });
         return 1;
     }
@@ -67,33 +78,33 @@ public class CommandManager {
     private static int changeLevel(CommandContext<CommandSourceStack> ctx, ServerPlayer target) {
         final ISkillType skill = SkillArgumentType.getSkill(ctx, "skill_id");
         if (skill == null) {
-            ctx.getSource().sendFailure(Component.translatable("cmd.skillful.skill.not_found"));
+            ctx.getSource().sendFailure(new TranslatableComponent("cmd.skillful.skill.not_found"));
             return 0;
         }
         target.getCapability(Skills.SKILLS_CAPABILITY).ifPresent(i -> {
             final SkillInstance instance = i.getOrCreateSkill(skill);
             instance.changeToLevel(target, LongArgumentType.getLong(ctx, "change"));
-            ctx.getSource().sendSystemMessage(Component.translatable("cmd.skillful.skill.list", target.getName())
-                    .withStyle(ChatFormatting.YELLOW));
-            ctx.getSource().sendSystemMessage(Utilities.getSkillInfo4Cmd(target, instance));
+            ctx.getSource().sendSuccess(new TranslatableComponent("cmd.skillful.skill.list", target.getName())
+                    .withStyle(ChatFormatting.YELLOW), false);
+            ctx.getSource().sendSuccess(Utilities.getSkillInfo4Cmd(target, instance), false);
         });
         return 1;
     }
 
     public static void init(CommandDispatcher<CommandSourceStack> dispatcher) {
-        ArgumentTypeInfos.registerByClass(SkillArgumentType.class, SingletonArgumentInfo.contextFree(SkillArgumentType::skill));
+        ArgumentTypes.register("skillful_skill", SkillArgumentType.class, new EmptyArgumentSerializer<>(SkillArgumentType::skill));
         final var rootCmd = Commands.literal(Skillful.MODID)
                 .requires(s -> true)
                 .then(Commands.literal("list")
-                        .requires(CommandSourceStack::isPlayer)
+                        .requires(isPlayer)
                         .executes(ctx -> list(ctx, ctx.getSource().getPlayerOrException())))
                 .then(Commands.literal("skill")
-                        .requires(CommandSourceStack::isPlayer)
+                        .requires(isPlayer)
                         .then(Commands.argument("skill_id", SkillArgumentType.skill())
-                                .requires(CommandSourceStack::isPlayer)
+                                .requires(isPlayer)
                                 .executes(ctx -> query(ctx, ctx.getSource().getPlayerOrException()))
                                 .then(Commands.literal("query")
-                                        .requires(CommandSourceStack::isPlayer)
+                                        .requires(isPlayer)
                                         .executes(ctx -> query(ctx, ctx.getSource().getPlayerOrException())))
                                 .then(Commands.literal("changexp")
                                         .requires(isOp)

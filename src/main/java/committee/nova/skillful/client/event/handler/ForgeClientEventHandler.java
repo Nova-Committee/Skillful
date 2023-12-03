@@ -10,6 +10,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -19,7 +20,7 @@ import net.minecraftforge.fml.common.Mod;
 public class ForgeClientEventHandler {
     @SubscribeEvent
     public static void onLevel(SkillLevelEvent event) {
-        if (!event.getPlayer().level().isClientSide) return;
+        if (!event.getPlayer().level.isClientSide) return;
         if (!event.isUp()) return;
         final long newLevel = event.getNewLevel();
         final boolean mastered = newLevel == event.getSkill().getSkill().getMaxLevel();
@@ -29,8 +30,8 @@ public class ForgeClientEventHandler {
                     .addToast(LevelUpToast.of(
                             event.getSkill().getSkill().getName(),
                             mastered ?
-                                    Component.translatable("toast.skillful.lvlup.mastered").withStyle(ChatFormatting.GOLD) :
-                                    Component.translatable("toast.skillful.lvlup.level", String.valueOf(newLevel))
+                                    new TranslatableComponent("toast.skillful.lvlup.mastered").withStyle(ChatFormatting.GOLD) :
+                                    new TranslatableComponent("toast.skillful.lvlup.level", String.valueOf(newLevel))
                                             .withStyle(ChatFormatting.DARK_GREEN)));
             case CHAT, OVERLAY -> {
                 final Player player = Minecraft.getInstance().player;
@@ -54,11 +55,11 @@ public class ForgeClientEventHandler {
         switch (mode) {
             case CHAT, OVERLAY -> {
                 final Player player = event.getPlayer();
-                if (!player.level().isClientSide) return;
+                if (!player.level.isClientSide) return;
                 final ISkillType skillType = event.getSkill().getSkill();
                 final long lvlChange = event.getLvlChange();
                 final long xpChange = event.getChange();
-                final Component msg = Component.translatable(
+                final Component msg = new TranslatableComponent(
                         "msg.skillful.xp.change",
                         skillType.getName(),
                         String.valueOf(event.getSkill().getLevel()),
@@ -66,7 +67,7 @@ public class ForgeClientEventHandler {
                         String.valueOf(skillType.getLevelRequiredXp(player, event.getSkill().getLevel())),
                         lvlChange == 0 ?
                                 (xpChange > 0 ? "+" + xpChange : String.valueOf(xpChange)) :
-                                Component.translatable(lvlChange > 0 ? "msg.skillful.level.up" : "msg.skillful.level.down")
+                                new TranslatableComponent(lvlChange > 0 ? "msg.skillful.level.up" : "msg.skillful.level.down")
                 ).withStyle(getColor(lvlChange, xpChange));
                 player.displayClientMessage(msg, mode.equals(ClientConfig.XpChangeDisplayMode.OVERLAY));
             }

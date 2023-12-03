@@ -22,12 +22,12 @@ public class NetworkHandler {
         instance.messageBuilder(SyncSingleSkillMsg.class, nextId())
                 .encoder(SyncSingleSkillMsg::toBytes)
                 .decoder(SyncSingleSkillMsg::new)
-                .consumerMainThread(SyncSingleSkillMsg::handler)
+                .consumer(SyncSingleSkillMsg::handler)
                 .add();
         instance.messageBuilder(SyncSkillsMsg.class, nextId())
                 .encoder(SyncSkillsMsg::toBytes)
                 .decoder(SyncSkillsMsg::new)
-                .consumerMainThread(SyncSkillsMsg::handler)
+                .consumer(SyncSkillsMsg::handler)
                 .add();
     }
 
