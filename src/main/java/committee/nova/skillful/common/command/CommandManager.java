@@ -14,8 +14,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.commands.synchronization.ArgumentTypes;
-import net.minecraft.commands.synchronization.EmptyArgumentSerializer;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -92,7 +90,6 @@ public class CommandManager {
     }
 
     public static void init(CommandDispatcher<CommandSourceStack> dispatcher) {
-        ArgumentTypes.register("skillful_skill", SkillArgumentType.class, new EmptyArgumentSerializer<>(SkillArgumentType::skill));
         final var rootCmd = Commands.literal(Skillful.MODID)
                 .requires(s -> true)
                 .then(Commands.literal("list")
