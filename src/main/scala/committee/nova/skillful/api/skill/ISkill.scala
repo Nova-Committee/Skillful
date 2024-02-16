@@ -3,18 +3,20 @@ package committee.nova.skillful.api.skill
 import committee.nova.skillful.impl.skill.instance.SkillInstance
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.util.ResourceLocation
-import net.minecraft.world.BossInfo
+import net.minecraft.util.text.{ITextComponent, TextFormatting}
 
 trait ISkill {
   def getId: ResourceLocation
 
-  def getColor: BossInfo.Color
+  def getColor: TextFormatting
 
   def getMaxLevel: Int
 
   def getLevelRequiredXp(level: Int): Int
 
   def shouldActOnLevelChange: Boolean = this.isInstanceOf[IActOnLevelChange]
+
+  def getName: ITextComponent
 
   def actOnLevelChange(player: EntityPlayerMP, instance: SkillInstance, isUp: Boolean): Unit = this match {
     case i: IActOnLevelChange => i.act(player, instance, isUp)

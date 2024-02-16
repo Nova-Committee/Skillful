@@ -1,7 +1,7 @@
 package committee.nova.skillful.network.handler
 
 import committee.nova.skillful.Skillful
-import committee.nova.skillful.network.message.{InfoClearMessage, SkillsSyncMessage}
+import committee.nova.skillful.network.message.SkillsSyncMessage
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.minecraftforge.fml.common.network.NetworkRegistry
 import net.minecraftforge.fml.common.network.simpleimpl.{IMessage, IMessageHandler, SimpleNetworkWrapper}
@@ -14,7 +14,6 @@ object NetworkHandler {
 
   def init(e: FMLPreInitializationEvent): Unit = {
     registerMessage(classOf[MessageHandler.SkillsSyncHandler], classOf[SkillsSyncMessage], Side.CLIENT)
-    registerMessage(classOf[MessageHandler.InfoClearHandler], classOf[InfoClearMessage], Side.CLIENT)
   }
 
   def registerMessage[REQ <: IMessage, REPLY <: IMessage](msgHandler: Class[_ <: IMessageHandler[REQ, REPLY]], requestMsgType: Class[REQ], side: Side): Unit = {

@@ -1,10 +1,8 @@
 package committee.nova.skillful.command.impl
 
 import com.google.common.collect.ImmutableList
-import committee.nova.skillful.command.impl.SkillfulCommand.{ChangeXPCommand, ClearInfoCommand, ShowCommand, ShowSelfCommand}
+import committee.nova.skillful.command.impl.SkillfulCommand.{ChangeXPCommand, ShowCommand, ShowSelfCommand}
 import committee.nova.skillful.implicits.Implicits.EntityPlayerImplicit
-import committee.nova.skillful.network.handler.NetworkHandler
-import committee.nova.skillful.network.message.InfoClearMessage
 import committee.nova.skillful.storage.SkillfulStorage
 import committee.nova.skillful.util.Utilities
 import net.minecraft.command.{CommandBase, ICommandSender}
@@ -88,26 +86,6 @@ object SkillfulCommand {
     }
   }
 
-  class ClearInfoCommand extends CommandBase {
-    override def getName: String = "clearinfo"
-
-    override def getUsage(sender: ICommandSender): String = "/skillful clearinfo"
-
-    override def checkPermission(server: MinecraftServer, sender: ICommandSender): Boolean = true
-
-    override def execute(server: MinecraftServer, sender: ICommandSender, args: Array[String]): Unit = {
-      sender match {
-        case p: EntityPlayerMP => {
-          p.clearSkillInfoCache()
-          NetworkHandler.instance.sendTo(new InfoClearMessage, p)
-          p.sendMessage(new TextComponentTranslation("msg.skillful.info.cache.clear")
-            .setStyle(new Style().setColor(TextFormatting.GREEN)))
-        }
-        case _ =>
-      }
-    }
-  }
-
   class ChangeXPCommand extends CommandBase {
     override def getName: String = "changexp"
 
@@ -151,7 +129,6 @@ object SkillfulCommand {
 class SkillfulCommand extends CommandTreeBase {
   addSubcommand(new ShowSelfCommand)
   addSubcommand(new ShowCommand)
-  addSubcommand(new ClearInfoCommand)
   addSubcommand(new ChangeXPCommand)
 
   override def getName: String = "skillful"

@@ -4,7 +4,7 @@ import committee.nova.skillful.api.skill.ISkill
 import committee.nova.skillful.impl.skill.instance.SkillInstance
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.util.ResourceLocation
-import net.minecraft.world.BossInfo
+import net.minecraft.util.text.{ITextComponent, Style, TextComponentTranslation, TextFormatting}
 import org.apache.logging.log4j.util.BiConsumer
 
 import java.util.function.{BiFunction, IntFunction}
@@ -16,7 +16,7 @@ object SkillBuilder {
 class SkillBuilder(val id: ResourceLocation) {
   private var maxLevel = 100
   private var required: Int => Int = i => i * 200
-  private var color: BossInfo.Color = BossInfo.Color.PINK
+  private var color: TextFormatting = TextFormatting.WHITE
   private var shouldActOnLevelChange$: Boolean = false
   private var shouldCheckOnLogin$: Boolean = false
   private var shouldChangeXPAfterSleep$: Boolean = false
@@ -39,7 +39,7 @@ class SkillBuilder(val id: ResourceLocation) {
     this
   }
 
-  def setColor(color: BossInfo.Color): SkillBuilder = {
+  def setColor(color: TextFormatting): SkillBuilder = {
     this.color = color
     this
   }
@@ -73,9 +73,11 @@ class SkillBuilder(val id: ResourceLocation) {
   def changeXPAfterSleep(sleep: BiFunction[EntityPlayerMP, SkillInstance, Int]): SkillBuilder = changeXPAfterSleep((p, s) => sleep.apply(p, s))
 
   def build: ISkill = new ISkill {
+    private var nameCache: ITextComponent = _
+
     override def getId: ResourceLocation = id
 
-    override def getColor: BossInfo.Color = color
+    override def getColor: TextFormatting = color
 
     override def getMaxLevel: Int = maxLevel
 
@@ -92,5 +94,11 @@ class SkillBuilder(val id: ResourceLocation) {
     override def shouldCheckOnLogin: Boolean = shouldCheckOnLogin$
 
     override def checkOnLogin(player: EntityPlayerMP, instance: SkillInstance): Unit = check.apply(player, instance)
+
+    override def getName: ITextComponent = {
+      if (nameCache == null) nameCache = new TextComponentTranslation(s"skill.${getId.getNamespace}.${getId.getPath}")
+        .setStyle(new Style().setColor(getColor))
+      nameCache
+    }
   }
 }

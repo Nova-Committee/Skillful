@@ -3,11 +3,8 @@ package committee.nova.skillful.player.capabilities.impl
 import committee.nova.skillful.Skillful.skillfulCap
 import committee.nova.skillful.api.skill.ISkill
 import committee.nova.skillful.impl.skill.instance.SkillInstance
-import committee.nova.skillful.implicits.Implicits.EntityPlayerImplicit
 import committee.nova.skillful.player.capabilities.api.ISkills
-import committee.nova.skillful.player.capabilities.info.SkillInfo
 import committee.nova.skillful.storage.SkillfulStorage
-import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.{NBTBase, NBTTagCompound, NBTTagList}
 import net.minecraft.util.{EnumFacing, ResourceLocation}
 import net.minecraftforge.common.capabilities.Capability.IStorage
@@ -63,8 +60,6 @@ object Skills {
   class Impl extends ISkills {
     private val skills: mutable.HashSet[SkillInstance] = new mutable.HashSet[SkillInstance]()
 
-    private val skillInfos: mutable.HashSet[SkillInfo] = new mutable.HashSet[SkillInfo]()
-
     override def getSkills: mutable.HashSet[SkillInstance] = skills
 
     override def getSkill(skill: ISkill): SkillInstance = {
@@ -77,15 +72,6 @@ object Skills {
     override def getSkillCleanly(skill: ISkill): Option[SkillInstance] = {
       skills.foreach(s => if (s.getSkill.equals(skill)) return Some(s))
       None
-    }
-
-    override def getSkillInfos: mutable.HashSet[SkillInfo] = skillInfos
-
-    override def getSkillInfo(player: EntityPlayer, skill: ISkill): SkillInfo = {
-      skillInfos.foreach(i => if (i.getSkillInstance.getSkill.equals(skill)) return i)
-      val instance = new SkillInfo(player.getSkillStat(skill))
-      skillInfos.add(instance)
-      instance
     }
 
     override def removeSkill(id: ResourceLocation): Boolean = {

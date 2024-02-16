@@ -7,7 +7,7 @@ import committee.nova.skillful.implicits.Implicits.EntityPlayerImplicit
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.item.ItemStack
 import net.minecraft.util.ResourceLocation
-import net.minecraft.world.BossInfo
+import net.minecraft.util.text.{ITextComponent, TextComponentTranslation, TextFormatting}
 import net.minecraftforge.fml.common.eventhandler.Event
 
 import scala.collection.mutable
@@ -34,13 +34,23 @@ object SkillfulStorage {
   def getSkill(id: ResourceLocation): ISkill = {
     skills.foreach(s => if (s.getId.equals(id)) return s)
     val dummy = new ISkill {
+      private var nameCache: ITextComponent = _
+
       override def getId: ResourceLocation = id
 
       override def getMaxLevel: Int = Int.MaxValue
 
       override def getLevelRequiredXp(level: Int): Int = Int.MaxValue
 
-      override def getColor: BossInfo.Color = BossInfo.Color.WHITE
+      override def getColor: TextFormatting = TextFormatting.WHITE
+
+      override def getName: ITextComponent = {
+        if (nameCache == null) nameCache = new TextComponentTranslation(
+          "skill.skillful.unknown",
+          Array(getId.toString)
+        )
+        nameCache
+      }
     }
     skills.add(dummy)
     Skillful.getLogger.warn(s"Skill with id $id not found. Registered a dummy one instead...")
@@ -55,13 +65,23 @@ object SkillfulStorage {
   def getSkillCleanly(id: ResourceLocation): ISkill = {
     skills.foreach(s => if (s.getId.equals(id)) return s)
     new ISkill {
+      private var nameCache: ITextComponent = _
+
       override def getId: ResourceLocation = id
 
       override def getMaxLevel: Int = Int.MaxValue
 
       override def getLevelRequiredXp(level: Int): Int = Int.MaxValue
 
-      override def getColor: BossInfo.Color = BossInfo.Color.WHITE
+      override def getColor: TextFormatting = TextFormatting.WHITE
+
+      override def getName: ITextComponent = {
+        if (nameCache == null) nameCache = new TextComponentTranslation(
+          "skill.skillful.unknown",
+          Array(getId.toString)
+        )
+        nameCache
+      }
     }
   }
 
